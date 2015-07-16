@@ -1,0 +1,13 @@
+body{background-image: url(../img/coming_bg.jpg);}
+h1{font-size: 36px;font-family: "Droid Sans","Droid Serif";}
+h2{font-size: 24px;}
+.l_lp_well_margin {color: #FFF}
+.casual{color: gray;}
+#search_bar #q {background: white !important;}
+#search_bar .input-huge {height: 55px;font-size: 24px;color: gray;}
+#search_bar .input-append input {border-radius: 4px 0 0 4px;}
+#search_bar .btn-huge {height: 55px;min-width: 70px;padding: 15px;}
+.input-append, .input-prepend {margin-bottom: 5px;font-size: 0;white-space: nowrap;}
+.input-append input{position: relative;margin-bottom: 0;vertical-align: top;-webkit-border-radius: 0 4px 4px 0;
+    -moz-border-radius: 0 4px 4px 0;border-radius: 0 4px 4px 0;}
+.input-append .btn{margin-left: -1px;}

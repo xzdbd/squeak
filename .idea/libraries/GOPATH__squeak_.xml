@@ -1,0 +1,33 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;squeak&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../dnakit_cloud" />
+      <root url="file://$PROJECT_DIR$/../../../gotest" />
+      <root url="file://$PROJECT_DIR$/../../../package" />
+      <root url="file://$PROJECT_DIR$/../../../hello.go" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../src" />
+    </CLASSES>
+    <SOURCES />
+    <excluded>
+      <root url="file://$PROJECT_DIR$/../../astaxie/beego/.git" />
+      <root url="file://$PROJECT_DIR$/../../smartystreets/goconvey/.git" />
+      <root url="file://$PROJECT_DIR$/.idea" />
+      <root url="file://$PROJECT_DIR$/../../go-sql-driver/mysql/.git" />
+      <root url="file://$PROJECT_DIR$/../../beego/bee/testdata" />
+      <root url="file://$PROJECT_DIR$/../../beego/bee/.git" />
+      <root url="file://$PROJECT_DIR$/../../../gotest/webstormtest/.idea" />
+      <root url="file://$PROJECT_DIR$/../../starchou/webcopy/.git" />
+      <root url="file://$PROJECT_DIR$/../../../package/config_backup/testdata" />
+      <root url="file://$PROJECT_DIR$/../weixingis/.git" />
+      <root url="file://$PROJECT_DIR$/../../../gotest/varstest/.idea" />
+      <root url="file://$PROJECT_DIR$/../../lib/pq/.git" />
+      <root url="file://$PROJECT_DIR$/../../smartystreets/assertions/.git" />
+      <root url="file://$PROJECT_DIR$/../../astaxie/beego/utils/testdata" />
+      <root url="file://$PROJECT_DIR$/../../jtolds/gls/.git" />
+      <root url="file://$PROJECT_DIR$/../../howeyc/fsnotify/.git" />
+      <root url="file://$PROJECT_DIR$" />
+      <root url="file://$PROJECT_DIR$/../../bitly/go-simplejson/.git" />
+    </excluded>
+  </library>
+</component>
