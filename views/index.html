@@ -129,31 +129,28 @@
           <span></span>
         </div>
       </a>
-      <ul class="dropdown-menu calcite-menu-drawer">
+      <ul class="dropdown-menu">
         <li><a role="button" data-target="#modalSplash" data-toggle="modal" aria-haspopup="true"> About</a></li>
         <li><a class="hidden-md hidden-lg" href="#2dTab" aria-controls="2Dtab" role="tab" data-toggle="tab"> Map</a></li>
-        <li><a class="hidden-md hidden-lg" href="#3dTab" aria-controls="3Dtab" role="tab" data-toggle="tab"> Scene</a></li>
         <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> Info</a></li>
         <li><a class="visible-xs" role="button" data-target="#panelSearch" aria-haspopup="true"><span class="glyphicon glyphicon-search"></span> Search</a></li>
         <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> Basemaps</a></li>
         <li><a role="button" data-target="#panelBookmarks" aria-haspopup="true"><span class="glyphicon glyphicon-book"></span> Bookmarks</a></li>
+        <li><a role="button" data-target="#panelQuery" aria-haspopup="true"><span class="glyphicon glyphicon-map-marker"></span> Query</a></li>
         <li><a role="button" data-target="#panelLegend" aria-haspopup="true"><span class="glyphicon glyphicon-list"></span> Legend</a></li>
-        <li><a role="button" data-target="#panelPrint" aria-haspopup="true"><span class="glyphicon glyphicon-print"></span> Print</a></li>
-        <li><a role="button" data-target="#panelShare" aria-haspopup="true"><span class="glyphicon glyphicon-share"></span> Share</a></li>
         <li><a role="button" data-target="#panelSettings" aria-haspopup="true"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
         <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
       </ul>
     </div> 
     <!-- Title -->
     <div class="calcite-title calcite-overflow-hidden">
-      <span class="calcite-title-main">Styler</span>
+      <span class="calcite-title-main">Demo System</span>
       <span class="calcite-title-divider hidden-xs"></span>
-      <span class="calcite-title-sub hidden-xs">Design map apps and explore styles interactively</span> 
+      <span class="calcite-title-sub hidden-xs">This is my demo system for Squeak</span> 
     </div>
     <!-- Nav -->
     <ul class="calcite-nav nav navbar-nav">                    
-      <li class="active"><a id="mapNav" class="hidden-xs hidden-sm" href="#2dTab" aria-controls="2Dtab" aria-expanded="true" role="tab" data-toggle="tab" data-tooltip="tip" title="2D View" data-placement="bottom">Map</a></li>
-      <li><a id="sceneNav" class="hidden-xs hidden-sm" href="#3dTab" aria-controls="3Dtab" role="tab" data-toggle="tab" data-tooltip="tip" title="3D View" data-placement="bottom">Scene</a></li>                  
+      <li class="active"><a id="mapNav" class="hidden-xs hidden-sm" href="#2dTab" aria-controls="2Dtab" aria-expanded="true" role="tab" data-toggle="tab" data-tooltip="tip" title="2D View" data-placement="bottom">Map</a></li>                 
       <li><div class="calcite-navbar-search calcite-search-expander"><div id="searchNavDiv"></div></div></li>
     </ul>
   </nav><!--/.navbar -->
@@ -192,10 +189,6 @@
       <div id="2dTab" class="tab-pane fade in active" role="tabpanel">
         <div id="mapViewDiv"></div>
       </div>
-      <div id="3dTab" class="tab-pane fade" role="tabpanel">
-        <div id="sceneViewDiv"></div>
-      </div>
-    </div>
   </div>
 
   <!-- Panel Container -->
@@ -236,14 +229,14 @@
 
     <!-- Panel - Basemaps -->
 
-     <div id="panelBasemaps" class="panel collapse">
+     <div id="panelBasemaps" class="panel collapse in">
       <div id="headingBasemaps" class="panel-heading" role="tab">
         <div class="panel-title">
-          <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseBasemaps" aria-expanded="false" aria-controls="collapseBasemaps"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span><span class="panel-label">Basemaps</span></a> 
+          <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseBasemaps" aria-expanded="false" aria-controls="collapseBasemaps"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span><span class="panel-label">Basemaps</span></a> 
           <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelBasemaps"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
         </div>
       </div>
-      <div id="collapseBasemaps" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingBasemaps">
+      <div id="collapseBasemaps" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingBasemaps">
         <div class="panel-body">
           <select id="selectBasemapPanel" class="form-control"> 
             <option value="streets" data-vector="streets-vector">Streets</option>
@@ -312,6 +305,75 @@
       </div>
     </div>
 
+    <!-- Panel - Query -->
+
+    <div id="panelQuery" class="panel collapse">
+      <div id="headingQuery" class="panel-heading" role="tab">
+        <div class="panel-title">
+        <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseQuery" aria-expanded="false" aria-controls="collapseQuery"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span><span class="panel-label">Query</span></a> 
+        <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelQuery"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
+        </div>
+      </div>
+      <div id="collapseQuery" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingQuery">
+        <div class="panel-body">          
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#bus" aria-controls="bus" role="tab" data-toggle="tab">Bus</a></li>
+            <li role="presentation"><a href="#bus2" aria-controls="bus2" role="tab" data-toggle="tab">Bus2</a></li>
+            <li role="presentation"><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
+            <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Layout</a></li>
+          </ul>
+
+        <div class="tab-content">
+
+            <!-- Tab -Bus1 -->
+          
+            <div role="tabpanel" class="tab-pane active" id="bus">  
+              <div class="calcite-form-title">Bus Information</div>  
+              <div class="form-horizontal calcite-form-padding">
+                <div class="form-group">
+                  <label for="queryBusIDInput" class="col-xs-3 control-label">ID</label>
+                  <div class="col-xs-9">
+                    <input type="text" class="form-control" id="queryBusIDInput" readonly="true" placeholder="{ID}">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="settingsSubTitleInput" class="col-xs-3 control-label">Name</label>
+                  <div class="col-xs-9">
+                    <input type="text" class="form-control" id="queryBusNameInput" readonly="true" placeholder="{Name}">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-9 col-xs-offset-3">
+                    <button id="titleButton" type="button" class="btn btn-primary btn-block">Apply</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Tab -Bus2 -->
+          
+            <div role="tabpanel" class="tab-pane" id="bus2">  
+              <div class="calcite-form-title">Bus Information</div>  
+              <div class="form-horizontal calcite-form-padding">
+                <table id="bus2-info-table" class="table table-responsive">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                  <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Panel - Legend -->
 
     <div id="panelLegend" class="panel collapse">
@@ -327,44 +389,10 @@
         </div>
       </div>
     </div>
-    
-    <!-- Panel - Print -->
-
-    <div id="panelPrint" class="panel collapse">
-      <div id="headingPrint" class="panel-heading">
-        <div class="panel-title">
-          <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapsePrint" aria-expanded="false" aria-controls="collapsePrint"><span class="glyphicon glyphicon-print" aria-hidden="true"></span><span class="panel-label">Print</span></a> 
-          <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelPrint"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>
-        </div>
-      </div>
-      <div id="collapsePrint" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingPrint">
-        <div class="panel-body">
-        <div class="form-group">
-           <button type="button" class="btn btn-default">Print [Coming soon!]</button>
-        </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel - Share -->
-
-    <div id="panelShare" class="panel collapse">
-      <div id="headingShare" class="panel-heading">
-        <div class="panel-title">
-        <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseShare" aria-expanded="false" aria-controls="collapseShare"><span class="glyphicon glyphicon-share" aria-hidden="true"></span><span class="panel-label">Share</span></a>                 
-        <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelShare"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
-        </div>
-      </div>
-      <div id="collapseShare" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingShare">
-        <div class="panel-body">
-          <p>Share [Coming soon!]</p>
-        </div>
-      </div>
-    </div>
 
     <!-- Panel - Settings -->
 
-    <div id="panelSettings" class="panel collapse in">
+    <div id="panelSettings" class="panel collapse">
               
       <div id="headingSettings" class="panel-heading">
         <div class="panel-title">
@@ -814,6 +842,7 @@
 
   <!-- ArcGIS JS 4.x -->
   <script src="https://xzdbd.com/static/arcgis/js/4.2/init.js"></script>
+  <script src="static/js/query.js"></script>
 
   <script>
     
@@ -869,7 +898,7 @@
         searchWidgetNav: null, 
         searchWidgetPanel: null, 
         searchWidgetSettings: null,
-        basemapSelected: "gray-vector",
+        basemapSelected: "gray",
         basemapSelectedAlt: "gray",
         padding: { 
           top: 85 ,
@@ -905,6 +934,8 @@
       //----------------------------------
 
       initializeMapViews();
+      initializeAppUI();
+
 
       //----------------------------------
       // Map and Scene View
@@ -913,7 +944,7 @@
       function initializeMapViews() {
           app.mapView = new MapView({
             container: app.mapDiv,
-            map: new Map( {basemap: "dark-gray", constraints: { snapToZoom: false } } ),
+            map: new Map( {basemap: app.basemapSelected, constraints: { snapToZoom: false } } ),
             scale: app.scale,
             center: app.lonlat, 
             padding: app.padding,
@@ -924,7 +955,127 @@
 
           app.activeView = app.mapView;
       }
+
+      //----------------------------------
+      // App UI Handlers
+      //----------------------------------
+
+      function initializeAppUI() {
+        // App UI
+        setBasemapEvents();
+        setSearchWidgets();
+        setPopupPanelEvents();
+        setPopupEvents();
+      }
       
+      //----------------------------------
+      // Basemaps
+      //----------------------------------
+
+      function setBasemapEvents() {
+
+        // Sync basemaps for map and scene
+        query("#selectBasemapPanel, #settingsSelectBasemap").on("change", function(e){
+          app.basemapSelected = e.target.options[e.target.selectedIndex].dataset.vector;
+          setBasemaps();               
+        });
+
+        function setBasemaps() {
+          app.mapView.map.basemap = app.basemapSelected;
+        } 
+      }
+
+      //----------------------------------
+      // Search Widgets
+      //----------------------------------
+
+      function setSearchWidgets() {
+        
+        //TODO - Search Nav + Panel (detach/attach)
+        app.searchWidgetNav = createSearchWidget("searchNavDiv", true);
+        app.searchWidgetPanel = createSearchWidget("searchPanelDiv", true);
+        app.searchWidgetSettings = createSearchWidget("settingsSearchDiv", false);
+
+         // Create widget
+        function createSearchWidget(parentId, showPopup) {
+          var search = new Search({
+            viewModel: {
+              view: app.activeView,
+              popupOpenOnSelect: showPopup,
+              highlightEnabled: false,
+              maxSuggestions: 4
+            },
+            }, parentId);
+          search.startup();
+          return search;
+        } 
+      }
+
+      //----------------------------------
+      // Popups and Panels
+      //----------------------------------
+
+      function setPopupPanelEvents() {
+
+        // Views - Listen to view size changes to show/hide panels
+        app.mapView.watch("size", viewSizeChange);
+
+        function viewSizeChange(screenSize) {
+          if (app.screenWidth !== screenSize[0]) {
+            app.screenWidth = screenSize[0];
+            setPanelVisibility();
+          }
+        }
+
+        // Popups - Listen to popup changes to show/hide panels
+        app.mapView.popup.watch(["visible", "currentDockPosition"], setPanelVisibility);
+
+        // Panels - Show/hide the panel when popup is docked
+        function setPanelVisibility() {
+           var isMobileScreen = app.activeView.widthBreakpoint === "xsmall" || app.activeView.widthBreakpoint === "small",
+            isDockedVisible = app.activeView.popup.visible && app.activeView.popup.currentDockPosition,
+            isDockedBottom = app.activeView.popup.currentDockPosition && app.activeView.popup.currentDockPosition.indexOf("bottom") > -1;
+          // Mobile (xsmall/small)
+          if (isMobileScreen) {
+            if (isDockedVisible && isDockedBottom) {
+              query(".calcite-panels").addClass("invisible");
+            } else {
+              query(".calcite-panels").removeClass("invisible");
+            }
+          } else { // Desktop (medium+)
+            if (isDockedVisible) {
+              query(".calcite-panels").addClass("invisible");
+            } else {
+              query(".calcite-panels").removeClass("invisible");          
+            }
+          }
+        }
+
+        // Panels - Dock popup when panels show (desktop or mobile)
+        query(".calcite-panels .panel").on("show.bs.collapse", function(e) {
+          if (app.activeView.popup.currentDockPosition || app.activeView.widthBreakpoint === "xsmall") {
+            app.activeView.popup.dockEnabled = false;
+          }
+        });
+
+        // Panels - Undock popup when panels hide (mobile only)
+        query(".calcite-panels .panel").on("hide.bs.collapse", function(e) {
+          if (app.activeView.widthBreakpoint === "xsmall") {
+            app.activeView.popup.dockEnabled = true;
+          }
+        });
+      }
+
+      //----------------------------------
+      // Popup collapse (optional)
+      //----------------------------------
+
+      function setPopupEvents() {      
+        query(".esri-popup__header-title").on("click", function(e){
+          query(".esri-popup__main-container").toggleClass("esri-popup-collapsed");
+          app.activeView.popup.reposition();
+        }.bind(this));
+      }
 
     });
   </script>
