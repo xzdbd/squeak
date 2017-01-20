@@ -319,7 +319,7 @@
           <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#bus" aria-controls="bus" role="tab" data-toggle="tab">Bus</a></li>
             <li role="presentation"><a href="#bus2" aria-controls="bus2" role="tab" data-toggle="tab">Bus2</a></li>
-            <li role="presentation"><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
+            <li role="presentation"><a href="#bus3" aria-controls="bus3" role="tab" data-toggle="tab">Bus3</a></li>
             <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Layout</a></li>
           </ul>
 
@@ -357,6 +357,24 @@
               <div class="calcite-form-title">Bus Information</div>  
               <div class="form-horizontal calcite-form-padding">
                 <table id="bus2-info-table" class="table table-responsive">
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                  <tr>
+                    <td>January</td>
+                    <td>$100</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab -Bus3 -->
+          
+            <div role="tabpanel" class="tab-pane" id="bus3">  
+              <div class="calcite-form-title">Bus Information</div>  
+              <div class="form-horizontal calcite-form-padding" id="bus3-div">
+                <table id="bus3-info-table" class="table table-responsive">
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
@@ -885,8 +903,8 @@
       watchUtils, query, domClass, dom, on, CalciteMapsSettings, PanelSettings) {
       
       app = {
-        scale: 50000000,
-        lonlat: [-40,40],
+        scale: 144448,
+        lonlat: [120.22590637206805,30.252701511655342],
         mapView: null, 
         mapDiv: "mapViewDiv",
         mapFL: null,
