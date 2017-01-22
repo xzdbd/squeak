@@ -137,6 +137,7 @@
         <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> Basemaps</a></li>
         <li><a role="button" data-target="#panelBookmarks" aria-haspopup="true"><span class="glyphicon glyphicon-book"></span> Bookmarks</a></li>
         <li><a role="button" data-target="#panelQuery" aria-haspopup="true"><span class="glyphicon glyphicon-map-marker"></span> Query</a></li>
+        <li><a role="button" data-target="#panelSqueakQuery" aria-haspopup="true"><span class="glyphicon glyphicon-map-marker"></span> Squeak Query</a></li>
         <li><a role="button" data-target="#panelLegend" aria-haspopup="true"><span class="glyphicon glyphicon-list"></span> Legend</a></li>
         <li><a role="button" data-target="#panelSettings" aria-haspopup="true"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
         <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
@@ -320,7 +321,7 @@
             <li role="presentation" class="active"><a href="#bus" aria-controls="bus" role="tab" data-toggle="tab">Bus</a></li>
             <li role="presentation"><a href="#bus2" aria-controls="bus2" role="tab" data-toggle="tab">Bus2</a></li>
             <li role="presentation"><a href="#bus3" aria-controls="bus3" role="tab" data-toggle="tab">Bus3</a></li>
-            <li role="presentation"><a href="#custom" aria-controls="custom" role="tab" data-toggle="tab">Layout</a></li>
+            <li role="presentation"><a href="#bus4" aria-controls="bus4" role="tab" data-toggle="tab">Bus4</a></li>
           </ul>
 
         <div class="tab-content">
@@ -358,10 +359,12 @@
               <div class="form-horizontal calcite-form-padding">
                 <table id="bus2-info-table" class="table table-responsive">
                   <tr>
+                    <th><input type="checkbox"/></th>
                     <th>ID</th>
                     <th>Name</th>
                   </tr>
                   <tr>
+                    <td><input type="checkbox"/></td>
                     <td>January</td>
                     <td>$100</td>
                   </tr>
@@ -387,6 +390,49 @@
               </div>
             </div>
 
+            <!-- Tab -Bus4 -->
+          
+            <div role="tabpanel" class="tab-pane" id="bus4">  
+              <div class="calcite-form-title">Bus Information</div>  
+              <div class="form-horizontal calcite-form-padding">
+                <table id="bus4-info-table" class="table table-responsive">
+                  <tr>
+                    <th><input type="checkbox"/></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                  </tr>
+                  <tr class="active">
+                    <td><input type="checkbox"/></td>
+                    <td>January</td>
+                    <td>$100</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Panel - Squeak Query -->
+
+    <div id="panelSqueakQuery" class="panel collapse">
+      <div id="headingSqueakQuery" class="panel-heading" role="tab">
+        <div class="panel-title">
+          <a class="panel-toggle collapsed" role="button" data-toggle="collapse" href="#collapseSqueakQuery" aria-expanded="false" aria-controls="collapseSqueakQuery"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span><span class="panel-label">Squeak Query</span></a> 
+          <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelSqueakQuery"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a> 
+        </div>
+      </div>
+      <div id="collapseSqueakQuery" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSqueakQuery">
+        <div class="panel-body">            
+          <div id="squeakQueryDiv">
+            <div class="calcite-form-title">Bus Information</div>  
+              <div class="form-horizontal calcite-form-padding" id="bus3-div">
+                <table id="bus-info-table" class="table table-responsive">
+                </table>
+              </div>
           </div>
         </div>
       </div>
@@ -854,7 +900,12 @@
       {
         name: "calcite-settings",
         location: location.pathname.replace(/\/[^/]+$/, "") + "static/js"
-      }]
+      },
+      {
+        name: "squeak",
+        location: location.pathname.replace(/\/[^/]+$/, "") + "static/js/squeak"
+      }
+      ]
     };
   </script>
 

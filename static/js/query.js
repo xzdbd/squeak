@@ -19,8 +19,11 @@ require([
       "dojo/html",
       "dojo/dom",
 
+      //squeak
+      "squeak/squeakquery",
+
       "dojo/domReady!"
-    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, query, html, dom) {
+    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, query, html, dom, SqueakQuery) {
 
         var busGraphicsLayer = new GraphicsLayer();
 
@@ -110,5 +113,38 @@ require([
       query("#panelQuery").on("hide.bs.collapse", function(){
         app.mapView.map.layers.remove(busGraphicsLayer)
       });   
+
+      query(".dropdown-menu li a[data-target='#panelSqueakQuery']").on("click", function(e) {
+        console.log("click squeak query widget.")  
+
+        var squeakQuery = new SqueakQuery({
+          params: {
+            layer: "https://gis.xzdbd.com/arcgis/rest/services/dev/bus/MapServer/0",
+            where: "OBJECTID < 6",
+            returnGeometry: true,
+            queryFields: ["Z______ID", "NAME", "KIND"],
+            displayFields: [
+              {display: "ID", mapping: "Z______ID"},
+              {display: "Name", mapping: "NAME"},
+              {display: "Kind", mapping: "KIND"}
+            ],
+            symbol: new SimpleMarkerSymbol({
+                            size: 10,
+                            color: "#FF4000",
+                            outline: {
+                              color: [255, 64, 0, 0.4],
+                              width: 7
+                            }
+                          }),
+            usePopupTemplate: true,
+            popupTemplate: new PopupTemplate({
+                            title: "Bus Station {NAME}",
+                            content: "ID: {Z______ID:StringFormat}"
+                          }),
+            htmlDom: "#bus-info-table"                                  
+          }
+        });
+        squeakQuery.executeQuery();
+      });
 
 });
