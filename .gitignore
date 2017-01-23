@@ -3,3 +3,4 @@
 *.prof
 
 squeak
+!static/js/squeak

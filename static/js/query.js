@@ -122,11 +122,12 @@ require([
             layer: "https://gis.xzdbd.com/arcgis/rest/services/dev/bus/MapServer/0",
             where: "OBJECTID < 6",
             returnGeometry: true,
-            queryFields: ["Z______ID", "NAME", "KIND"],
+            queryFields: ["OBJECTID", "Z______ID", "NAME", "KIND"],
             displayFields: [
-              {display: "ID", mapping: "Z______ID"},
-              {display: "Name", mapping: "NAME"},
-              {display: "Kind", mapping: "KIND"}
+              {display: "OBJECTID", mapping: "OBJECTID", visible: false},
+              {display: "ID", mapping: "Z______ID", visible: true},
+              {display: "Name", mapping: "NAME", visible: true},
+              {display: "kind", mapping: "KIND", visible: true}
             ],
             symbol: new SimpleMarkerSymbol({
                             size: 10,
@@ -141,7 +142,8 @@ require([
                             title: "Bus Station {NAME}",
                             content: "ID: {Z______ID:StringFormat}"
                           }),
-            htmlDom: "#bus-info-table"                                  
+            htmlDom: "#bus-info-table",
+            zoom: 13                               
           }
         });
         squeakQuery.executeQuery();
