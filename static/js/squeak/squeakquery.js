@@ -34,9 +34,9 @@
 
    squeakQuery.executeQuery();
 
-   Note: 
-   1. queryFields and displayFields must contain "OBJECTID" as primariy key.
-   
+ * Note: 
+ * 1. queryFields and displayFields must contain "OBJECTID" as primariy key.
+ *
    ======================================================================== */
 
 define([

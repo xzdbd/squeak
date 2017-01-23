@@ -13,6 +13,8 @@ require([
       "esri/Graphic",
       "esri/symbols/SimpleMarkerSymbol",
       "esri/PopupTemplate",
+      "esri/WebMap",
+      "esri/widgets/Legend",
       
       //dojo
       "dojo/query",
@@ -23,7 +25,7 @@ require([
       "squeak/squeakquery",
 
       "dojo/domReady!"
-    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, query, html, dom, SqueakQuery) {
+    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, WebMap, Legend, query, html, dom, SqueakQuery) {
 
         var busGraphicsLayer = new GraphicsLayer();
 
@@ -146,7 +148,39 @@ require([
             zoom: 13                               
           }
         });
-        squeakQuery.executeQuery();
+        squeakQuery.executeQuery();       
+      });
+
+      query(".dropdown-menu li a[data-target='#panelLegend']").on("click", function(e) {
+        console.log("click legend widget.")  
+
+        var webmap = new WebMap({
+          portalItem: { // autocasts as new PortalItem()
+            id: "4abe6a830b8f466dacf8abfde567a781"
+          }
+        });
+
+        app.mapView.center = [-73.84497189648397, 41.04363086681146]
+        app.mapView.zoom = 10
+        app.mapView.map = webmap
+        
+        app.mapView.then(function() {
+          // get the first layer in the collection of operational layers in the WebMap
+          // when the resources in the MapView have loaded.
+          var featureLayer = webmap.layers.getItemAt(0);
+
+          var legend = new Legend({
+            view: app.mapView,
+            layerInfos: [{
+              layer: featureLayer,
+              title: "NY Educational Attainment"
+            }]
+          });
+
+          // Add widget to the bottom right corner of the view
+          app.mapView.ui.add(legend, "bottom-right");
+        });
+
       });
 
 });
