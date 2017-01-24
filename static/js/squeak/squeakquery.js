@@ -29,7 +29,8 @@
                 content: "ID: {Z______ID:StringFormat}"
               }),
     htmlDom: "#bus-info-table",
-    zoom: 13               
+    zoom: 13,
+    legend: true               
    });
 
    squeakQuery.executeQuery();
@@ -47,6 +48,7 @@ define([
     "esri/Graphic",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/PopupTemplate",
+    "esri/widgets/Legend",
 
     //dojo
     "dojo/query",
@@ -55,7 +57,7 @@ define([
     "dojo/dom-class",
 
     "dojo/domReady!"
-], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, query, html, declare, domClass) {
+], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, Legend, query, html, declare, domClass) {
     var SqueakQueryWidget = declare(null, {
 
         _this: null,
@@ -101,6 +103,9 @@ define([
                 }
                 html.set(query(_this.params.htmlDom)[0], htmlTemplate);
                 initResultEvent();
+                if (_this.params.legend) {
+                    showLegend();
+                }
             }, function(error){
                 html.set(query(_this.params.htmlDom)[0], initNoResultGrid());
             }); //end of queryTask.execute     
@@ -168,6 +173,17 @@ define([
                 if (_this.params.zoom != ""){
                     app.mapView.zoom = _this.params.zoom
                 }
+            }
+
+            function showLegend() {
+                var legend = new Legend({
+                    view: app.mapView,
+                    layerInfos: [{
+                        layer: graphicsLayer,
+                        title: "图例"
+                    }]
+                });
+                app.mapView.ui.add(legend, "bottom-right");
             }
 
         }

@@ -15,6 +15,7 @@ require([
       "esri/PopupTemplate",
       "esri/WebMap",
       "esri/widgets/Legend",
+      "esri/views/MapView",
       
       //dojo
       "dojo/query",
@@ -25,7 +26,7 @@ require([
       "squeak/squeakquery",
 
       "dojo/domReady!"
-    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, WebMap, Legend, query, html, dom, SqueakQuery) {
+    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, WebMap, Legend, MapView, query, html, dom, SqueakQuery) {
 
         var busGraphicsLayer = new GraphicsLayer();
 
@@ -145,7 +146,8 @@ require([
                             content: "ID: {Z______ID:StringFormat}"
                           }),
             htmlDom: "#bus-info-table",
-            zoom: 13                               
+            zoom: 13,
+            legend: false                               
           }
         });
         squeakQuery.executeQuery();       
@@ -160,11 +162,12 @@ require([
           }
         });
 
-        app.mapView.center = [-73.84497189648397, 41.04363086681146]
-        app.mapView.zoom = 10
-        app.mapView.map = webmap
+        app.mapView.center = [-73.84497189648397, 41.04363086681146];
+        app.mapView.zoom = 10;
+        app.mapView.map = webmap;
+
         
-        app.mapView.then(function() {
+        webmap.then(function() {
           // get the first layer in the collection of operational layers in the WebMap
           // when the resources in the MapView have loaded.
           var featureLayer = webmap.layers.getItemAt(0);
