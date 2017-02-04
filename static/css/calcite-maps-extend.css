@@ -1,0 +1,97 @@
+.calcite-div-content {
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+    background-color: white
+}
+
+.calcite-div-content-bottom {
+    bottom: 0;
+    transition: height 0.1s ease-in;
+}
+
+.calcite-div-content-transparent-background {
+    background: rgba(256,256,256,0.70);
+    border-top: 1px solid #028D6A
+}
+
+.calcite-div-content-info {
+    height: 240px;
+}
+
+.calcite-div-content-resultbox-panel {
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.calcite-div-content-box-container {
+    border: 1px solid #028D6A;
+    background: #fff;
+    display: inline-block;
+    float: left;
+    height: 192px;
+    margin: 15px 15px 13px 0;
+    overflow: hidden;
+    width: 350px;
+}
+
+.calcite-div-content-info-container {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.calcite-div-content-header-container {
+    clear: both;
+    height: 100%;
+    position: relative;
+}
+
+.calcite-div-toggle {
+    color: #808080;
+    position: absolute;
+    z-index: 999;
+    transition: bottom 0.1s ease-in;
+    bottom: 0px;
+    right: 0;
+}
+
+.calcite-div-toggle-bottom {
+    bottom: 240px;
+}
+
+.calcite-div-toggle .calcite-div-toggle-background {
+    overflow: hidden;
+    z-index: 1005;
+    text-align: center;
+    float: right;
+    margin: 0 10px;
+}
+
+.calcite-div-toggle .calcite-div-toggle-background .up-and-down-arrow {
+    background-color: #028D6A;
+    border-bottom: 1px solid #028D6A;
+    background-image: url(../images/down.png);
+    cursor: pointer;
+    height: 43px;
+    width: 131px;
+    margin-top: 16px;
+    bottom: 0px;
+    background-position: 0px;
+}
+
+.calcite-div-toggle .calcite-div-toggle-background .span-result {
+    color: #fff;
+    top: 30px;
+    cursor: pointer;
+    position: absolute;
+    right: 55px;
+    width: 65px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
