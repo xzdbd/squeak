@@ -21,12 +21,13 @@ require([
       "dojo/query",
       "dojo/html",
       "dojo/dom",
+      "dojo/dom-class",
 
       //squeak
       "squeak/squeakquery",
 
       "dojo/domReady!"
-    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, WebMap, Legend, MapView, query, html, dom, SqueakQuery) {
+    ], function(QueryTask, Query, GraphicsLayer, Graphic, SimpleMarkerSymbol, PopupTemplate, WebMap, Legend, MapView, query, html, dom, domClass, SqueakQuery) {
 
         var busGraphicsLayer = new GraphicsLayer();
 
