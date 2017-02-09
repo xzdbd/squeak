@@ -27,6 +27,9 @@ var app;
       "dojo/on",
       "dojo/dom-construct",
 
+      // Calcite Maps
+      "calcite-maps/calcitemaps-v0.3",
+
       // Boostrap
       "bootstrap/Collapse", 
       "bootstrap/Dropdown",
@@ -38,7 +41,7 @@ var app;
       // Dojo
       "dojo/domReady!"
     ], function(Map, Basemap, VectorTileLayer, MapView, SceneView, Search, Popup, Home, Legend, ColorPicker, 
-      watchUtils, FeatureLayer, MapImageLayer, query, domClass, dom, on, domConstruct) {
+      watchUtils, FeatureLayer, MapImageLayer, query, domClass, dom, on, domConstruct, CalciteMapsSettings) {
       
       app = {
         scale: 1155581,

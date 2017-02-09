@@ -135,9 +135,8 @@
       <ul class="dropdown-menu">
         <li><a role="button" data-target="#modalSplash" data-toggle="modal" aria-haspopup="true"> About</a></li>
         <li><a class="hidden-md hidden-lg" href="#2dTab" aria-controls="2Dtab" role="tab" data-toggle="tab"> Map</a></li>
-        <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span class="glyphicon glyphicon-info-sign"></span> Info</a></li>
         <li><a class="visible-xs" role="button" data-target="#panelSearch" aria-haspopup="true"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-        <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> Basemaps</a></li>
+        <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> 底图</a></li>
         <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
       </ul>
     </div> 
@@ -164,7 +163,7 @@
             <div class="row">
               <div class="splash-body">
                 <div class="text-center">
-                  <h3>Welcome to Water Distribution System</h3>
+                  <h3>Welcome to Pollution Monitor System</h3>
                   <hr>
                   <div class="form-inline">
                     <div class="form-group">
@@ -260,27 +259,9 @@
     </div>   
   </div>
 
-  
-
   <!-- Panel Container -->
   
   <div class="calcite-panels calcite-panels-right calcite-bgcolor-light-orange calcite-text-dark panel-group" role="tablist" aria-multiselectable="true">
-    
-    <!-- Panel - Info -->
-
-    <div id="panelInfo" class="panel collapse">
-      <div id="headingInfo" class="panel-heading" role="tab">
-        <div class="panel-title">
-          <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span><span class="panel-label">Info</span></a> 
-          <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelInfo"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
-        </div>
-      </div>
-      <div id="collapseInfo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingInfo">
-        <div class="panel-body">
-          <p><span class="esri-icon esri-icon-map-pin pull-left"></span><span class="info-title">Calcite Maps</span></p>
-        </div>
-      </div>
-    </div>
     
     <!-- Panel - Search -->
 
@@ -307,7 +288,7 @@
           <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelBasemaps"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
         </div>
       </div>
-      <div id="collapseBasemaps" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingBasemaps">
+      <div id="collapseBasemaps" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingBasemaps">
         <div class="panel-body">
           <select id="selectBasemapPanel" class="form-control"> 
             <option value="streets" data-vector="streets-vector">Streets</option>

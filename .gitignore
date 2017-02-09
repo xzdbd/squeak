@@ -4,3 +4,5 @@
 
 squeak
 !static/js/squeak
+
+conf/app.conf
