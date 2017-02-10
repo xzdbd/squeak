@@ -6,6 +6,8 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
 
+	"errors"
+
 	_ "github.com/lib/pq"
 )
 
@@ -43,6 +45,10 @@ type Pollution struct {
 	Time             time.Time `json:"time_point"`
 }
 
+type PollutionError struct {
+	Error string `json:"error"`
+}
+
 type Stations struct {
 	City     string `json:"city"`
 	Stations []Station
@@ -58,8 +64,9 @@ func init() {
 	//InitDB()
 }
 
-func GetAQIDetailsByCity(city string) []Pollution {
+func GetAQIDetailsByCity(city string) ([]Pollution, error) {
 	var pollutions []Pollution
+	var pollutionError PollutionError
 	url := APIADDRESS + "aqi_details.json"
 	req := httplib.Get(url)
 	req.Param("token", TOKEN)
@@ -67,12 +74,19 @@ func GetAQIDetailsByCity(city string) []Pollution {
 	err := req.ToJSON(&pollutions)
 	if err != nil {
 		beego.Error(err)
+		err := req.ToJSON(&pollutionError)
+		if err != nil {
+			return pollutions, err
+		}
+		beego.Error("API Error:", pollutionError.Error)
+		return pollutions, errors.New(pollutionError.Error)
 	}
-	return pollutions
+	return pollutions, nil
 }
 
-func GetStationInfoByCity(city string) Stations {
+func GetStationInfoByCity(city string) (Stations, error) {
 	var stations Stations
+	var pollutionError PollutionError
 	url := APIADDRESS + "station_names.json"
 	req := httplib.Get(url)
 	req.Param("token", TOKEN)
@@ -80,8 +94,14 @@ func GetStationInfoByCity(city string) Stations {
 	err := req.ToJSON(&stations)
 	if err != nil {
 		beego.Error(err)
+		err := req.ToJSON(&pollutionError)
+		if err != nil {
+			return stations, err
+		}
+		beego.Error("API Error:", pollutionError.Error)
+		return stations, errors.New(pollutionError.Error)
 	}
-	return stations
+	return stations, nil
 }
 
 func InitMonitorPollution() {

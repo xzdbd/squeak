@@ -2,4 +2,4 @@ appname = squeak
 httpport = 8094
 runmode = dev
 dbconnection = 
-pollutionschedule = "0 */10 * * * *"
+pollutionschedule = "0 */1 * * * *"

@@ -94,21 +94,22 @@ func syncStation() {
 	count, err := o.QueryTable("monitor_station").Count()
 	if err != nil || count <= 0 {
 		var stations []MonitorStation
-		stationInfos := GetStationInfoByCity("hangzhou")
-		monitorArea := new(MonitorArea)
-		monitorArea.Id = 1
-		monitorArea.Name = "杭州"
+		if stationInfos, err := GetStationInfoByCity("hangzhou"); err == nil {
+			monitorArea := new(MonitorArea)
+			monitorArea.Id = 1
+			monitorArea.Name = "杭州"
 
-		for i := 0; i < len(stationInfos.Stations); i++ {
-			monitorStation := MonitorStation{Id: i + 1, Name: stationInfos.Stations[i].StationName, Code: stationInfos.Stations[i].StationCode, MonitorArea: monitorArea}
-			stations = append(stations, monitorStation)
-		}
+			for i := 0; i < len(stationInfos.Stations); i++ {
+				monitorStation := MonitorStation{Id: i + 1, Name: stationInfos.Stations[i].StationName, Code: stationInfos.Stations[i].StationCode, MonitorArea: monitorArea}
+				stations = append(stations, monitorStation)
+			}
 
-		num, err := o.InsertMulti(1, stations)
-		if err != nil {
-			beego.Error("Failed to sync Table monitor_station:", err)
+			num, err := o.InsertMulti(1, stations)
+			if err != nil {
+				beego.Error("Failed to sync Table monitor_station:", err)
+			}
+			beego.Info("Sync Table monitor_station: insert", num, "records")
 		}
-		beego.Info("Sync Table monitor_station: insert", num, "records")
 	} else {
 		beego.Info("Sync Table monitor_station: no change")
 	}
@@ -118,57 +119,100 @@ func syncStation() {
 func InsertNewPollutionData() (num int64, err error) {
 	var monitorPollutions []MonitorPollution
 	o := orm.NewOrm()
-	pollutions := GetAQIDetailsByCity("hangzhou")
-	for i := 0; i < len(pollutions); i++ {
-		//TODO use cache
-		//query area from db
-		monitorArea := new(MonitorArea)
-		o.QueryTable(monitorArea).Filter("name", pollutions[i].Area).One(monitorArea)
+	if pollutions, err := GetAQIDetailsByCity("hangzhou"); err == nil {
+		for i := 0; i < len(pollutions); i++ {
+			//TODO use cache
+			//query area from db
+			monitorArea := new(MonitorArea)
+			o.QueryTable(monitorArea).Filter("name", pollutions[i].Area).One(monitorArea)
 
-		//query station from db
-		monitorStation := new(MonitorStation)
-		o.QueryTable(monitorStation).Filter("code", pollutions[i].StationCode).Filter("name", pollutions[i].StationName).One(monitorStation)
+			//query station from db
+			monitorStation := new(MonitorStation)
+			o.QueryTable(monitorStation).Filter("code", pollutions[i].StationCode).Filter("name", pollutions[i].StationName).One(monitorStation)
 
-		monitorPollution := MonitorPollution{
-			Aqi:              pollutions[i].Aqi,
-			PrimaryPollutant: pollutions[i].PrimaryPollutant,
-			So2:              pollutions[i].So2,
-			So224h:           pollutions[i].So224h,
-			No2:              pollutions[i].No2,
-			No224h:           pollutions[i].No224h,
-			Pm10:             pollutions[i].Pm10,
-			Pm1024h:          pollutions[i].Pm1024h,
-			Co:               pollutions[i].Co,
-			Co24h:            pollutions[i].Co24h,
-			O3:               pollutions[i].O3,
-			O324h:            pollutions[i].O324h,
-			O38h:             pollutions[i].O38h,
-			O38h24h:          pollutions[i].O38h24h,
-			Pm25:             pollutions[i].Pm25,
-			Pm2524h:          pollutions[i].Pm2524h,
-			Quality:          pollutions[i].Quality,
-			Time:             pollutions[i].Time,
-			MonitorArea:      monitorArea,
-			MonitorStation:   monitorStation}
-		// TODO use cache
-		if !o.QueryTable(monitorPollution).Filter("time", monitorPollution.Time).Exist() {
-			monitorPollutions = append(monitorPollutions, monitorPollution)
+			monitorPollution := MonitorPollution{
+				Aqi:              pollutions[i].Aqi,
+				PrimaryPollutant: pollutions[i].PrimaryPollutant,
+				So2:              pollutions[i].So2,
+				So224h:           pollutions[i].So224h,
+				No2:              pollutions[i].No2,
+				No224h:           pollutions[i].No224h,
+				Pm10:             pollutions[i].Pm10,
+				Pm1024h:          pollutions[i].Pm1024h,
+				Co:               pollutions[i].Co,
+				Co24h:            pollutions[i].Co24h,
+				O3:               pollutions[i].O3,
+				O324h:            pollutions[i].O324h,
+				O38h:             pollutions[i].O38h,
+				O38h24h:          pollutions[i].O38h24h,
+				Pm25:             pollutions[i].Pm25,
+				Pm2524h:          pollutions[i].Pm2524h,
+				Quality:          pollutions[i].Quality,
+				Time:             pollutions[i].Time,
+				MonitorArea:      monitorArea,
+				MonitorStation:   monitorStation}
+			// TODO use cache
+			if !o.QueryTable(monitorPollution).Filter("time", monitorPollution.Time).Exist() {
+				monitorPollutions = append(monitorPollutions, monitorPollution)
+			}
+		}
+		if len(monitorPollutions) > 0 {
+			num, err = o.InsertMulti(len(monitorPollutions), monitorPollutions)
+			if err != nil {
+				beego.Error("Insert new pollution data into monitor_pollution failed. Error: ", err)
+			}
+			beego.Info("Insert new pollution data into monitor_pollution succeeded. Num:", num, "Time:", monitorPollutions[0].Time)
+		} else {
+			beego.Info("No new pollution data")
 		}
 	}
-	if len(monitorPollutions) > 0 {
-		num, err = o.InsertMulti(len(monitorPollutions), monitorPollutions)
-		if err != nil {
-			beego.Error("Insert new pollution data into monitor_pollution failed. Error: ", err)
-		}
-		beego.Info("Insert new pollution data into monitor_pollution succeeded. Num:", num, "Time:", monitorPollutions[0].Time)
-	} else {
-		beego.Info("No new pollution data")
+	return
+}
+
+// get all areas information
+func QueryAreaInfo() (monitorAreas []*MonitorArea, err error) {
+	o := orm.NewOrm()
+	_, err = o.QueryTable(new(MonitorArea)).All(&monitorAreas)
+	if err != nil {
+		beego.Error("Query Area Info error:", err)
+	}
+	return
+}
+
+// get all stations information
+func QueryStationInfo() (monitorStations []*MonitorStation, err error) {
+	o := orm.NewOrm()
+	_, err = o.QueryTable(new(MonitorStation)).All(&monitorStations)
+	if err != nil {
+		beego.Error("Query Area Info error:", err)
+	}
+	return
+}
+
+// get all stations' pollution data in certain period of time
+func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollution []*MonitorPollution, err error) {
+	var defaultRowsLimit = 1000
+	o := orm.NewOrm()
+	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollution)
+	if err != nil {
+		beego.Error("Query Pollution Info error:", err)
+	}
+	return
+}
+
+// get a station's pollution data in certain period of time
+func QueryPollutionInfoByStation(stationId int, from time.Time, to time.Time) (monitorPollution []*MonitorPollution, err error) {
+	var defaultRowsLimit = 1000
+	o := orm.NewOrm()
+	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollution)
+	if err != nil {
+		beego.Error("Query Pollution Info error:", err)
 	}
 	return
 }
 
 // For test
-func InitTableArea() {
+/*func InitTableArea() {
 	o := orm.NewOrm()
 	monitorArea := new(MonitorArea)
 	monitorArea.Id = 1
@@ -277,4 +321,4 @@ func InsertPollution() {
 
 	num, err := o.InsertMulti(len(monitorPollutions), monitorPollutions)
 	beego.Trace("num: ", num, "err: ", err)
-}
+}*/

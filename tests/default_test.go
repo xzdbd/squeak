@@ -8,6 +8,8 @@ import (
 	"github.com/xzdbd/squeak/models"
 	_ "github.com/xzdbd/squeak/routers"
 
+	"time"
+
 	"github.com/astaxie/beego"
 )
 
@@ -35,19 +37,44 @@ func init() {
 	})
 }*/
 
-func TestInsertArea(t *testing.T) {
+/*func TestInsertArea(t *testing.T) {
 	models.InitTableArea()
-}
+}*/
 
-func TestInsertStation(t *testing.T) {
+/*func TestInsertStation(t *testing.T) {
 	models.InitTableStation()
-}
+}*/
 
 /*func TestInsertPollution(t *testing.T) {
 	models.InsertPollution()
 }*/
 
-func TestUpdatePollutionTable(t *testing.T) {
+/*func TestUpdatePollutionTable(t *testing.T) {
 	num, err := models.InsertNewPollutionData()
 	beego.Trace(num, err)
+}*/
+
+/*func TestQueryAreaInfo(t *testing.T) {
+	models.QueryAreaInfo()
+}
+
+func TestQueryStationInfo(t *testing.T) {
+	stations, _ := models.QueryStationInfo()
+	for i := 0; i < len(stations); i++ {
+		beego.Info(stations[i].Id, stations[i].Code, stations[i].Name)
+	}
+}*/
+
+func TestQueryPollutionInfo(t *testing.T) {
+	monitorPollutions, _ := models.QueryPollutionInfo(time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC), time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC))
+	for i := 0; i < len(monitorPollutions); i++ {
+		beego.Info(monitorPollutions[i].Aqi, monitorPollutions[i].Time, monitorPollutions[i].MonitorStation, monitorPollutions[i].MonitorArea)
+	}
+}
+
+func TestQueryPollutionInfoByStation(t *testing.T) {
+	monitorPollutions, _ := models.QueryPollutionInfoByStation(1, time.Date(2017, 2, 9, 15, 0, 0, 0, time.UTC), time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC))
+	for i := 0; i < len(monitorPollutions); i++ {
+		beego.Info(monitorPollutions[i].Aqi, monitorPollutions[i].Time, monitorPollutions[i].MonitorStation, monitorPollutions[i].MonitorArea)
+	}
 }
