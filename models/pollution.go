@@ -8,6 +8,8 @@ import (
 
 	"errors"
 
+	"strings"
+
 	_ "github.com/lib/pq"
 )
 
@@ -22,27 +24,28 @@ var (
 )
 
 type Pollution struct {
-	StationName      string    `json:"position_name"`
-	StationCode      string    `json:"station_code"`
-	Aqi              int32     `json:"aqi"`
-	Area             string    `json:"area"`
-	PrimaryPollutant string    `json:"primary_pollutant"`
-	So2              float32   `json:"so2"`
-	So224h           float32   `json:"so2_24h"`
-	No2              float32   `json:"no2"`
-	No224h           float32   `json:"no2_24h"`
-	Pm10             float32   `json:"pm10"`
-	Pm1024h          float32   `json:"pm10_24h"`
-	Co               float32   `json:"co2"`
-	Co24h            float32   `json:"co2_24h"`
-	O3               float32   `json:"o3"`
-	O324h            float32   `json:"o3_24h"`
-	O38h             float32   `json:"o3_8h"`
-	O38h24h          float32   `json:"o3_8h_24h"`
-	Pm25             float32   `json:"pm2_5"`
-	Pm2524h          float32   `json:"pm2_5_24h"`
-	Quality          string    `json:"quality"`
-	Time             time.Time `json:"time_point"`
+	StationName      string  `json:"position_name"`
+	StationCode      string  `json:"station_code"`
+	Aqi              int32   `json:"aqi"`
+	Area             string  `json:"area"`
+	PrimaryPollutant string  `json:"primary_pollutant"`
+	So2              float32 `json:"so2"`
+	So224h           float32 `json:"so2_24h"`
+	No2              float32 `json:"no2"`
+	No224h           float32 `json:"no2_24h"`
+	Pm10             float32 `json:"pm10"`
+	Pm1024h          float32 `json:"pm10_24h"`
+	Co               float32 `json:"co2"`
+	Co24h            float32 `json:"co2_24h"`
+	O3               float32 `json:"o3"`
+	O324h            float32 `json:"o3_24h"`
+	O38h             float32 `json:"o3_8h"`
+	O38h24h          float32 `json:"o3_8h_24h"`
+	Pm25             float32 `json:"pm2_5"`
+	Pm2524h          float32 `json:"pm2_5_24h"`
+	Quality          string  `json:"quality"`
+	TimeStr          string  `json:"time_point"`
+	Time             time.Time
 }
 
 type PollutionError struct {
@@ -80,6 +83,15 @@ func GetAQIDetailsByCity(city string) ([]Pollution, error) {
 		}
 		beego.Error("API Error:", pollutionError.Error)
 		return pollutions, errors.New(pollutionError.Error)
+	}
+	for i := 0; i < len(pollutions); i++ {
+		var err error
+		timeStr := pollutions[i].TimeStr
+		timeStr = strings.Replace(timeStr, "Z", "+08:00", 1)
+		pollutions[i].Time, err = time.Parse("2006-01-02T15:04:05Z07:00", timeStr)
+		if err != nil {
+			return pollutions, err
+		}
 	}
 	return pollutions, nil
 }

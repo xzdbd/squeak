@@ -122,39 +122,39 @@ var app;
             app.mapView.map.add(mapImageLayer);
             
             var template = {
-              title: "<font color='#008000'>监测站：{name}",
+              title: "<font color='#008000'>监测站：{hangzhouPollutionStation.name}",
 
               content: [{
                 type: "fields",
                 fieldInfos: [{
-                  fieldName: "code", 
+                  fieldName: "squeakdb.public.view_latest_pollution.aqi", 
                   visible: true,
-                  label: "站点编码",
-                  format: {
-                    places: 0,
-                    digitSeparator: true
-                  }
-                }, {
-                  fieldName: "name", 
-                  visible: true,
-                  label: "站点名称",
-                  format: {
-                    places: 0,
-                    digitSeparator: true
-                  }
-                }, {
-                  fieldName: "area", 
-                  visible: true,
-                  label: "所在城市",
+                  label: "AQI",
                   format: {
                     places: 0,
                     digitSeparator: true
                   },       
-                  }
+                }, {
+                  fieldName: "squeakdb.public.view_latest_pollution.quality", 
+                  visible: true,
+                  label: "当前空气质量",       
+                }, {
+                  fieldName: "squeakdb.public.view_latest_pollution.primary_pollutant", 
+                  visible: true,
+                  label: "主要污染物",       
+                }, {
+                  fieldName: "squeakdb.public.view_latest_pollution.time", 
+                  visible: true,
+                  label: "数据更新时间",
+                  format: {
+                    dateFormat: "short-date-short-time-24",
+                  },       
+                },
                 ]
               }, {
                 type: "text",
-                text: "当前AQI值：{aqi}"
+                text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateString(hideTime: false, local: false, systemLocale: false)}",
+                //text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
               }]
             };
 

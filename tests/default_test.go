@@ -8,8 +8,6 @@ import (
 	"github.com/xzdbd/squeak/models"
 	_ "github.com/xzdbd/squeak/routers"
 
-	"time"
-
 	"github.com/astaxie/beego"
 )
 
@@ -65,7 +63,14 @@ func TestQueryStationInfo(t *testing.T) {
 	}
 }*/
 
-func TestQueryPollutionInfo(t *testing.T) {
+func TestGetAQIDetailsByCity(t *testing.T) {
+	pollutions, _ := models.GetAQIDetailsByCity("hangzhou")
+	for i := 0; i < len(pollutions); i++ {
+		beego.Info(pollutions[i])
+	}
+}
+
+/*func TestQueryPollutionInfo(t *testing.T) {
 	monitorPollutions, _ := models.QueryPollutionInfo(time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC), time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC))
 	for i := 0; i < len(monitorPollutions); i++ {
 		beego.Info(monitorPollutions[i].Aqi, monitorPollutions[i].Time, monitorPollutions[i].MonitorStation, monitorPollutions[i].MonitorArea)
@@ -77,4 +82,4 @@ func TestQueryPollutionInfoByStation(t *testing.T) {
 	for i := 0; i < len(monitorPollutions); i++ {
 		beego.Info(monitorPollutions[i].Aqi, monitorPollutions[i].Time, monitorPollutions[i].MonitorStation, monitorPollutions[i].MonitorArea)
 	}
-}
+}*/
