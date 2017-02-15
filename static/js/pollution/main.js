@@ -248,7 +248,6 @@ require([
           ]
         }, {
           type: "text",
-          //text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateString(hideTime: false, local: false, systemLocale: false)}",
           text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
         }],
 
