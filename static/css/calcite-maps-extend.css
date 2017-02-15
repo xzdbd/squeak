@@ -59,6 +59,55 @@
     position: relative;
 }
 
+.calcite-div-content-span-header {
+    color: #028D6A;
+    font-weight: bolder;
+    margin-left: 15px !important;
+    font-weight: bold;
+    margin: 15px 0 0 0;
+    float: left;
+    width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calcite-div-content-result-content {
+    padding-left: 15px;
+    text-align: justify;
+    clear: both;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.calcite-div-content-div-clear {
+    clear: both;
+}
+
+.calcite-div-content-info-text {
+    border-bottom: 1px solid #b4b4b4;
+    color: #808080;
+
+    border-bottom: 1px solid #b4b4b4;
+    color: #6e6e6e;
+    padding: 10px 4px 10px 0px;
+    text-align: justify;
+    float: left;
+    width: 98%;
+    font-size: 12px;
+}
+
+.calcite-div-content-info-link {
+    color: #028D6A;
+    text-decoration: none;
+
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: auto;
+}
+
 .calcite-div-toggle {
     color: #808080;
     position: absolute;
