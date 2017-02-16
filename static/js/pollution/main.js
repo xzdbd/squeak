@@ -31,6 +31,12 @@ require([
   "dojo/dom",
   "dojo/on",
   "dojo/dom-construct",
+  "dojo/date",
+  "dojo/date/locale",
+  "dojo/request",
+
+  //cedar chart
+  "cedar",
 
   // Calcite Maps
   "calcite-maps/calcitemaps-v0.3",
@@ -46,7 +52,7 @@ require([
   // Dojo
   "dojo/domReady!"
 ], function (Map, Basemap, VectorTileLayer, MapView, SceneView, Search, Popup, Home, Legend, ColorPicker,
-  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, query, domClass, dom, on, domConstruct, CalciteMapsSettings) {
+  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, query, domClass, dom, on, domConstruct, date, locale, request, Cedar, CalciteMapsSettings) {
 
     app = {
       scale: 1155581,
@@ -147,7 +153,7 @@ require([
             }, {
               fieldName: "squeakdb.public.view_latest_pollution.primary_pollutant",
               visible: true,
-              label: "主要污染物",
+              label: "首要污染物",
             },
             ]
           }, {
@@ -177,13 +183,55 @@ require([
         app.legend = legend;
         setTimeout(setLegendEvents, 2000);
 
-        // popup
+        // popup detail content
         app.mapView.popup.on("trigger-action", function (e) {
           if (e.action.id == "detail") {
             showPollutionDeatils();
           }
         });
+
+        // update detail info
+        app.mapView.on("click", function (e) {
+          console.log("view click")
+          var screenPoint = {
+            x: e.x,
+            y: e.y
+          };
+
+          app.mapView.hitTest(screenPoint).then(updateDetailInfo);
+        });
       });
+    }
+
+    function updateDetailInfo(response) {
+      dom.byId("detail-station-name").innerHTML = "监测站名称: " + isNullValue(response.results[0].graphic.getAttribute("hangzhouPollutionStation.name"));
+      dom.byId("detail-station-area").innerHTML = "所在城市: " + isNullValue(response.results[0].graphic.getAttribute(["hangzhouPollutionStation.area"]));
+      dom.byId("detail-station-time").innerHTML = "数据更新时间： " + isNullValue(formatDate(getLocalTime(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.time"]))));
+
+      dom.byId("detail-detail-quality").innerHTML = "空气质量: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.quality"]));
+      dom.byId("detail-detail-aqi").innerHTML = "AQI: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.aqi"]));
+      dom.byId("detail-detail-primary-pollutant").innerHTML = "首要污染物: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.primary_pollutant"]));
+      dom.byId("detail-detail-pm25").innerHTML = "PM2.5: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.pm25"]));
+      dom.byId("detail-detail-pm10").innerHTML = "PM10: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.pm10"]));
+      dom.byId("detail-detail-co").innerHTML = "CO: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.co"]));
+      dom.byId("detail-detail-no2").innerHTML = "NO2: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.no2"]));
+      dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.o3"]));
+      dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.so2"]));
+
+      function getLocalTime(timestamp) {
+        return new Date(parseInt(timestamp));
+      }
+
+      function formatDate(date, fmt) {
+        return locale.format(date, { datePattern: 'yyyy-MM-d', timePattern: 'HH:mm' });
+      };
+
+      function isNullValue(value) {
+        if (value == null) {
+          return "--"
+        }
+        return value
+      }
     }
 
     //----------------------------------
@@ -288,6 +336,9 @@ require([
               case "严重污染":
                 graphic.symbol = severeSymbol;
                 break;
+              default:
+                graphic.symbol = goodSymbol;
+                break;
             }
             graphic.popupTemplate = template;
             graphicsLayer.add(graphic);
@@ -297,9 +348,45 @@ require([
       });
     }
 
+    //----------------------------------
+    // Pollution Details Handler
+    //----------------------------------
+
     function showPollutionDeatils() {
-      zoomOutResultContent()
-      console.log(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.name"]);
+      if (domClass.contains(query(".calcite-div-toggle")[0], "calcite-div-toggle-zero-bottom")) {
+        zoomOutResultContent()
+      }
+      /*console.log(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.name"]);
+      dom.byId("detail-station-name").innerHTML = "监测站名称: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.name"]);
+      dom.byId("detail-station-area").innerHTML = "所在城市: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.area"]);
+      dom.byId("detail-station-time").innerHTML = "数据更新时间： " + isNullValue(formatDate(getLocalTime(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.time"])));
+
+      dom.byId("detail-detail-quality").innerHTML = "空气质量: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.quality"]);
+      dom.byId("detail-detail-aqi").innerHTML = "AQI: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.aqi"]);
+      dom.byId("detail-detail-primary-pollutant").innerHTML = "首要污染物: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.primary_pollutant"]);
+      dom.byId("detail-detail-pm25").innerHTML = "PM2.5: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.pm25"]);
+      dom.byId("detail-detail-pm10").innerHTML = "PM10: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.pm10"]);
+      dom.byId("detail-detail-co").innerHTML = "CO: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.co"]);
+      dom.byId("detail-detail-no2").innerHTML = "NO2: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.no2"]);
+      dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.o3"]);
+      dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.so2"]);
+
+
+      function getLocalTime(timestamp) {
+        return new Date(parseInt(timestamp));
+      }
+
+      function formatDate(date, fmt) {
+        return locale.format(date, { datePattern: 'yyyy-MM-d', timePattern: 'HH:mm' });
+      };
+
+      function isNullValue(value) {
+        if (value == null) {
+          return "--"
+        }
+        return value
+      }*/
+
     }
 
     //----------------------------------
@@ -313,6 +400,7 @@ require([
       setPopupPanelEvents();
       setPopupEvents();
       setResultContentEvents();
+      setChartEvents();
     }
 
     //----------------------------------
@@ -486,6 +574,62 @@ require([
         //    style: "width:" + app.legend.activeLayerInfos.items[0].legendElements[0].infos[0].width + ";" + "height:" + app.legend.activeLayerInfos.items[0].legendElements[0].infos[0].height
         //}, legendNode);
       });
+    }
+
+    //----------------------------------
+    // Chart
+    //----------------------------------
+    function setChartEvents() {
+      var chartData
+      request.get("./pollution/chart?id=1", {
+        handleAs: "json"
+      }).then(function (data) {
+        /*var features = {
+          "features": [{ "attributes": { "name": "111", "aqi": 32 } },
+          { "attributes": { "name": "222", "aqi": 42 } }]
+        };*/
+
+        console.log(data);
+        var features = { "features": [] }
+        data.forEach(function (data) {
+          features.features.push({ "attributes": { "time_point": formatSimpleDate(getLocalTime(data.time_point)), "aqi": data.aqi, "full_time": formatFullDate(getLocalTime(data.time_point))} })
+        })
+        var chart = new Cedar({ "type": "time" });
+        var dataset = {
+          "data": features,
+          "mappings": {  
+            "time": { "field": "time_point", "label": "Time" },
+            "value": { "field": "aqi", "label": "AQI" },
+            "sort": "time_point ASC",
+          }
+        };
+
+        //assign to the chart
+        chart.dataset = dataset;
+
+        chart.tooltip = {
+          "title": "{full_time}",
+          "content": "AQI: {aqi}"
+        }
+
+        //show the chart
+        chart.show({
+          elementId: "#chart",
+        });
+      });
+
+      function getLocalTime(time) {
+        return new Date(time);
+      }
+
+      function formatSimpleDate(date) {
+        return locale.format(date, { selector: "time", timePattern: 'H' });
+      };
+
+      function formatFullDate(date) {
+        return locale.format(date, { datePattern: 'yyyy-MM-d', timePattern: 'HH:mm' });
+      };
+
     }
 
 

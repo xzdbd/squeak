@@ -260,7 +260,9 @@
                 <div class="calcite-div-content-result-content">
                   <div>
                     <div class="calcite-div-content-div-clear"></div>
-                    <div class="calcite-div-content-info-text">滨江</div>
+                    <div class="calcite-div-content-info-text" id="detail-station-name">监测站名称： 滨江</div>
+                    <div class="calcite-div-content-info-text" id="detail-station-area">所在城市： 杭州</div>
+                    <div class="calcite-div-content-info-text" id="detail-station-time">数据更新时间： 2017-02-16 11:00</div>
                   </div>
                 </div>
               </div>
@@ -276,44 +278,34 @@
                 <div class="calcite-div-content-result-content">
                   <div>
                     <div class="calcite-div-content-div-clear"></div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">No: 8</div>
-                    <div class="calcite-div-content-info-text">PM2.5: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
-                    <div class="calcite-div-content-info-text">So2: 8</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-quality">空气质量： 优</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-aqi">AQI: 48</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-primary-pollutant">首要污染物: 细颗粒物(PM2.5)</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-pm25">PM2.5: 33</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-pm10">PM10: 47</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-co">CO: 0.8</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-no2">NO2: 16</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-o3">O3: 59</div>
+                    <div class="calcite-div-content-info-text" id="detail-detail-so2">SO2: 36</div>
                   </div>
                 </div>
               </div>
             </div> 
           </div>
 
-          <div class="calcite-div-content-box-container" id="result3ContentContainer">
+          <div class="calcite-div-content-chart-container" id="result3ContentContainer">
             <div class="calcite-div-content-info-container">
               <div class="calcite-div-content-header-container">
-                <p>content3</p>
+                <div>
+                  <div class="calcite-div-content-span-header"><span class="esri-icon-table"></span> 详细指标</div>  
+                </div>
+                <div class="calcite-div-content-result-content">
+                  <div id="chart" style="width: 100%; height: 180px;"></div>
+                </div>
               </div>
             </div> 
           </div>
 
-          <div class="calcite-div-content-box-container" id="result4ContentContainer">
-            <div class="calcite-div-content-info-container">
-              <div class="calcite-div-content-header-container">
-                <p>content4</p>
-              </div>
-            </div> 
-          </div>
-
-          <div class="calcite-div-content-box-container" id="result5ContentContainer">
-            <div class="calcite-div-content-info-container">
-              <div class="calcite-div-content-header-container">
-                <p>content5</p>
-              </div>
-            </div> 
-          </div>
         </div>
       </div>
     </div>   
@@ -386,6 +378,21 @@
       {
         name: "squeak",
         location: location.pathname.replace(/\/[^/]+$/, "") + "/static/js/squeak"
+      },
+      {
+        name: 'd3',
+        location: 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6',
+        main: 'd3.min'
+      }, 
+      {
+        name: 'vega',
+        location: 'https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.1',
+        main: 'vega.min'
+      }, 
+      {
+        name: 'cedar',
+        location: 'https://unpkg.com/arcgis-cedar@0.7.0/dist',
+        main: 'cedar.min'
       }
       ]
     };
@@ -394,10 +401,6 @@
   <!-- ArcGIS JS 4.x -->
   <script src="https://xzdbd.com/static/arcgis/js/4.2/init.js"></script>
   <script src="/static/js/pollution/main.js"></script>
-  <script>
-    
-    
-  </script>
 
 </body>
 </html>

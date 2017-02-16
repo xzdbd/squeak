@@ -8,4 +8,5 @@ import (
 func init() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/pollution", &controllers.PollutionController{})
+	beego.Router("/pollution/chart", &controllers.PollutionChartController{})
 }

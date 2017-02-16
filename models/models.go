@@ -49,7 +49,7 @@ type MonitorPollution struct {
 }
 
 func init() {
-	//orm.Debug = true
+	orm.Debug = true
 	initDBConnection()
 	syncdb()
 	syncArea()
@@ -192,10 +192,10 @@ func QueryStationInfo() (monitorStations []*MonitorStation, err error) {
 }
 
 // get all stations' pollution data in certain period of time
-func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollution []*MonitorPollution, err error) {
+func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollutions []*MonitorPollution, err error) {
 	var defaultRowsLimit = 1000
 	o := orm.NewOrm()
-	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollution)
+	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollutions)
 	if err != nil {
 		beego.Error("Query Pollution Info error:", err)
 	}
@@ -203,15 +203,34 @@ func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollution []*Monit
 }
 
 // get a station's pollution data in certain period of time
-func QueryPollutionInfoByStation(stationId int, from time.Time, to time.Time) (monitorPollution []*MonitorPollution, err error) {
+func QueryPollutionInfoByStation(stationId int, from time.Time, to time.Time) (monitorPollutions []*MonitorPollution, err error) {
 	var defaultRowsLimit = 1000
 	o := orm.NewOrm()
-	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollution)
+	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollutions)
 	if err != nil {
 		beego.Error("Query Pollution Info error:", err)
 	}
 	return
 }
+
+func QueryPollutionInfoLast24HourByStation(stationId int) (monitorPollutions []*MonitorPollution, err error) {
+	var defaultRowsLimit = 1000
+	o := orm.NewOrm()
+	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", "(SELECT MAX(time) - interval '1 DAY' FROM monitor_pollution)").Filter("Time__lte", "(SELECT MAX(time) FROM monitor_pollution)").RelatedSel().All(&monitorPollutions)
+	if err != nil {
+		beego.Error("Query Pollution Info error:", err)
+	}
+	return
+}
+
+/*func QueryPollutionInfoLast24HourByStation(stationId int) (monitorPollutions []*MonitorPollution, err error) {
+	o := orm.NewOrm()
+	_, err = o.Raw("SELECT T0.id, T0.aqi, T0.primary_pollutant, T0.so2, T0.so224h, T0.no2, T0.no224h, T0.pm10, T0.pm1024h, T0.co, T0.co24h, T0.o3, T0.o324h, T0.o38h, T0.o38h24h, T0.pm25, T0.pm2524h, T0.quality, T0.time, T0.monitor_area_id, T0.monitor_station_id, T1.id, T1.name, T2.id, T2.name, T2.code, T2.monitor_area_id, T3.id, T3.name FROM view_latest_24h_pollution T0 INNER JOIN monitor_area T1 ON T1.id = T0.monitor_area_id INNER JOIN monitor_station T2 ON T2.id = T0.monitor_station_id INNER JOIN monitor_area T3 ON T3.id = T2.monitor_area_id WHERE T2.id = ?", stationId).QueryRows(&monitorPollutions)
+	if err != nil {
+		beego.Error("Query Pollution Info Last 24 Hour error:", err)
+	}
+	return
+}*/
 
 // For test
 /*func InitTableArea() {

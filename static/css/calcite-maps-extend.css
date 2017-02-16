@@ -46,6 +46,17 @@
     width: 350px;
 }
 
+.calcite-div-content-chart-container {
+    border: 1px solid #028D6A;
+    background: #fff;
+    display: inline-block;
+    float: left;
+    height: 192px;
+    margin: 15px 15px 13px 0;
+    overflow: hidden;
+    width: 870px;
+}
+
 .calcite-div-content-info-container {
     top: 0;
     left: 0;
