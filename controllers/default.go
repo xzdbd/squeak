@@ -36,7 +36,6 @@ func (c *PollutionChartController) Post() {
 		now := time.Now()
 		lastDay := now.AddDate(0, 0, -1)
 		monitorPollutions, err := models.QueryPollutionInfoByStation(id, lastDay, now)
-		beego.Trace(now, lastDay, monitorPollutions)
 		if err != nil {
 			c.Data["json"] = err.Error()
 		} else {
