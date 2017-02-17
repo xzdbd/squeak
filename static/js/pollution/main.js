@@ -244,32 +244,32 @@ require([
       var graphicsLayer = new GraphicsLayer();
       var layer = "https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionStation/MapServer/0";
       var goodSymbol = new PictureMarkerSymbol({
-        url: "./static/images/good.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/good.png",
         width: "56px",
         height: "70px",
       });
       var fineSymbol = new PictureMarkerSymbol({
-        url: "./static/images/fine.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/fine.png",
         width: "56px",
         height: "70px",
       });
       var slightSymbol = new PictureMarkerSymbol({
-        url: "./static/images/slight.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/slight.png",
         width: "56px",
         height: "70px",
       });
       var mediumSymbol = new PictureMarkerSymbol({
-        url: "./static/images/medium.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/medium.png",
         width: "56px",
         height: "70px",
       });
       var heavySymbol = new PictureMarkerSymbol({
-        url: "./static/images/heavy.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/heavy.png",
         width: "56px",
         height: "70px",
       });
       var severeSymbol = new PictureMarkerSymbol({
-        url: "./static/images/severe.png",
+        url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/severe.png",
         width: "56px",
         height: "70px",
       });
