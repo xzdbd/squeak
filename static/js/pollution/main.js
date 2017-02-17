@@ -218,6 +218,8 @@ require([
       dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.o3"]));
       dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.so2"]));
 
+      updateChartInfo(response.results[0].graphic.getAttribute(["hangzhouPollutionStation.id"]));
+
       function getLocalTime(timestamp) {
         return new Date(parseInt(timestamp));
       }
@@ -400,7 +402,6 @@ require([
       setPopupPanelEvents();
       setPopupEvents();
       setResultContentEvents();
-      setChartEvents();
     }
 
     //----------------------------------
@@ -579,44 +580,42 @@ require([
     //----------------------------------
     // Chart
     //----------------------------------
-    function setChartEvents() {
+    function updateChartInfo(stationId) {
       var chartData
-      request.get("./pollution/chart?id=1", {
-        handleAs: "json"
-      }).then(function (data) {
-        /*var features = {
-          "features": [{ "attributes": { "name": "111", "aqi": 32 } },
-          { "attributes": { "name": "222", "aqi": 42 } }]
-        };*/
+      if (stationId != null) {
+        request.get("./pollution/chart?id=" + stationId, {
+          handleAs: "json"
+        }).then(function (data) {
+          /*var features = {
+            "features": [{ "attributes": { "name": "111", "aqi": 32 } },
+            { "attributes": { "name": "222", "aqi": 42 } }]
+          };*/
+          var features = { "features": [] }
+          data.forEach(function (data) {
+            features.features.push({ "attributes": { "time_point": getUnixTimestamp(getLocalTime(data.time_point)), "aqi": data.aqi, "full_time": formatFullDate(getLocalTime(data.time_point)) } })
+          })
+          var chart = new Cedar({ "type": "time" });
+          var dataset = {
+            "data": features,
+            "mappings": {
+              "time": { "field": "time_point", "label": "time" },
+              "value": { "field": "aqi", "label": "aqi" },
+              "sort": "full_time ASC",
+            }
+          };
 
-        console.log(data);
-        var features = { "features": [] }
-        data.forEach(function (data) {
-          features.features.push({ "attributes": { "time_point": formatSimpleDate(getLocalTime(data.time_point)), "aqi": data.aqi, "full_time": formatFullDate(getLocalTime(data.time_point))} })
-        })
-        var chart = new Cedar({ "type": "time" });
-        var dataset = {
-          "data": features,
-          "mappings": {  
-            "time": { "field": "time_point", "label": "Time" },
-            "value": { "field": "aqi", "label": "AQI" },
-            "sort": "time_point ASC",
+          chart.dataset = dataset;
+
+          chart.tooltip = {
+            "title": "{full_time}",
+            "content": "AQI: {aqi}"
           }
-        };
 
-        //assign to the chart
-        chart.dataset = dataset;
-
-        chart.tooltip = {
-          "title": "{full_time}",
-          "content": "AQI: {aqi}"
-        }
-
-        //show the chart
-        chart.show({
-          elementId: "#chart",
+          chart.show({
+            elementId: "#chart",
+          });
         });
-      });
+      }
 
       function getLocalTime(time) {
         return new Date(time);
@@ -629,6 +628,10 @@ require([
       function formatFullDate(date) {
         return locale.format(date, { datePattern: 'yyyy-MM-d', timePattern: 'HH:mm' });
       };
+
+      function getUnixTimestamp(date) {
+        return date.getTime()
+      }
 
     }
 
