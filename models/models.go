@@ -49,7 +49,7 @@ type MonitorPollution struct {
 }
 
 func init() {
-	orm.Debug = true
+	//orm.Debug = true
 	initDBConnection()
 	syncdb()
 	syncArea()

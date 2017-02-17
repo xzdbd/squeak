@@ -34,6 +34,9 @@ require([
   "dojo/date",
   "dojo/date/locale",
   "dojo/request",
+  "dojo/_base/declare",
+  "dojo/dom-style",
+  "dojo/_base/fx",
 
   //cedar chart
   "cedar",
@@ -52,7 +55,7 @@ require([
   // Dojo
   "dojo/domReady!"
 ], function (Map, Basemap, VectorTileLayer, MapView, SceneView, Search, Popup, Home, Legend, ColorPicker,
-  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, query, domClass, dom, on, domConstruct, date, locale, request, Cedar, CalciteMapsSettings) {
+  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, query, domClass, dom, on, domConstruct, date, locale, request, declare, domStyle, fx, Cedar, CalciteMapsSettings) {
 
     app = {
       scale: 1155581,
@@ -97,17 +100,53 @@ require([
           breakpoint: 544 // default
         }
       },
-      colorPickerWidget: null,
+      loading: null,
     }
 
     //----------------------------------
     // App
     //----------------------------------
-
+    initializeLoadingOverlay();
     initializeMapViews();
     initializeStationLayer();
     initializeAppUI();
 
+
+    //----------------------------------
+    // Loading Overlay
+    //----------------------------------
+
+    function initializeLoadingOverlay() {
+      var Loading = declare(null, {
+        overlayNode: null,
+        indicatorNode: null,
+        fadedout: null,
+        constructor: function () {
+          // save a reference to the overlay
+          this.overlayNode = dom.byId("loadingOverlay");
+          this.indicatorNode = dom.byId("loadingIndicator");
+          this.fadedout = true;
+        },
+        // called to hide the loading overlay
+        endLoading: function () {
+          domStyle.set(this.overlayNode, 'display', 'none');
+          fx.fadeOut({
+            node: this.indicatorNode,
+            onEnd: function (node) {
+              domStyle.set(node, 'display', 'none');
+            }
+          }).play();
+          this.fadedout = false;
+        }
+      });
+      app.loading = new Loading();
+
+      setTimeout(function () {
+        if (app.loading.fadedout == true) {
+          app.loading.endLoading();
+        }
+      }, 10000);
+    }
 
     //----------------------------------
     // Map and Scene View
@@ -131,9 +170,9 @@ require([
         var mapImageLayer = new MapImageLayer({
           url: "https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionStation/MapServer"
         });
-        //app.mapView.map.add(mapImageLayer);
+        app.mapView.map.add(mapImageLayer);
 
-        var template = {
+        /*var template = {
           title: "<font color='#008000'>监测站：{hangzhouPollutionStation.name}",
 
           content: [{
@@ -181,7 +220,7 @@ require([
         });
         //app.mapView.ui.add(legend, "bottom-right");
         app.legend = legend;
-        setTimeout(setLegendEvents, 2000);
+        setTimeout(setLegendEvents, 2000);*/
 
         // popup detail content
         app.mapView.popup.on("trigger-action", function (e) {
@@ -346,6 +385,8 @@ require([
             graphicsLayer.add(graphic);
           });
           app.mapView.map.layers.add(graphicsLayer);
+          // remove loading
+          app.loading.endLoading();
         }
       });
     }
@@ -358,37 +399,6 @@ require([
       if (domClass.contains(query(".calcite-div-toggle")[0], "calcite-div-toggle-zero-bottom")) {
         zoomOutResultContent()
       }
-      /*console.log(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.name"]);
-      dom.byId("detail-station-name").innerHTML = "监测站名称: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.name"]);
-      dom.byId("detail-station-area").innerHTML = "所在城市: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["hangzhouPollutionStation.area"]);
-      dom.byId("detail-station-time").innerHTML = "数据更新时间： " + isNullValue(formatDate(getLocalTime(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.time"])));
-
-      dom.byId("detail-detail-quality").innerHTML = "空气质量: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.quality"]);
-      dom.byId("detail-detail-aqi").innerHTML = "AQI: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.aqi"]);
-      dom.byId("detail-detail-primary-pollutant").innerHTML = "首要污染物: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.primary_pollutant"]);
-      dom.byId("detail-detail-pm25").innerHTML = "PM2.5: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.pm25"]);
-      dom.byId("detail-detail-pm10").innerHTML = "PM10: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.pm10"]);
-      dom.byId("detail-detail-co").innerHTML = "CO: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.co"]);
-      dom.byId("detail-detail-no2").innerHTML = "NO2: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.no2"]);
-      dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.o3"]);
-      dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(app.mapView.popup.viewModel.selectedFeature.attributes["squeakdb.public.view_latest_pollution.so2"]);
-
-
-      function getLocalTime(timestamp) {
-        return new Date(parseInt(timestamp));
-      }
-
-      function formatDate(date, fmt) {
-        return locale.format(date, { datePattern: 'yyyy-MM-d', timePattern: 'HH:mm' });
-      };
-
-      function isNullValue(value) {
-        if (value == null) {
-          return "--"
-        }
-        return value
-      }*/
-
     }
 
     //----------------------------------
@@ -583,7 +593,7 @@ require([
     function updateChartInfo(stationId) {
       var chartData
       if (stationId != null) {
-        request.get("./pollution/chart?id=" + stationId, {
+        request.post("./pollution/chart?id=" + stationId, {
           handleAs: "json"
         }).then(function (data) {
           /*var features = {
@@ -634,6 +644,4 @@ require([
       }
 
     }
-
-
   });

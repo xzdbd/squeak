@@ -29,7 +29,7 @@ func (c *PollutionController) Get() {
 	c.TplName = "pollution/index.html"
 }
 
-func (c *PollutionChartController) Get() {
+func (c *PollutionChartController) Post() {
 	stationId := c.GetString("id")
 	id, _ := strconv.Atoi(stationId)
 	if stationId != "" {
@@ -45,4 +45,8 @@ func (c *PollutionChartController) Get() {
 
 	}
 	c.ServeJSON()
+}
+
+func (c *PollutionChartController) Get() {
+	c.Redirect("/pollution", 302)
 }

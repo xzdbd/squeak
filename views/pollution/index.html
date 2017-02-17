@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,76 +11,74 @@
   <link rel="icon" href="https://www.esri.com/favicon.ico">
   <title>Pullution Minotor</title>
 
-  <!-- Bootstrap - For testing only -->
-  <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
-
   <!-- Calcite Maps Bootstrap -->
-  <link rel="stylesheet" href="static/css/calcite-maps-bootstrap-v0.3.css">
+  <link rel="stylesheet" href="static/css/calcite-maps-bootstrap.min-v0.3.css">
 
   <!-- Calcite Maps -->
   <link rel="stylesheet" href="static/css/calcite-maps-arcgis-4.x.min-v0.3.css">
 
-   <!-- Calcite Maps Extend -->
+  <!-- Calcite Maps Extend -->
   <link rel="stylesheet" href="static/css/calcite-maps-extend.css">
-  
+
   <!-- ArcGIS JS 4.x -->
   <link rel="stylesheet" href="https://xzdbd.com/static/arcgis/js/4.2/esri/css/main.css">
   <!--link rel="stylesheet" href="../../dist/css/arcgis/themes/light/main.css"-->
 
   <style>
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       height: 100%;
     }
-
+    
     #panelLegend .panel-body {
       background-color: white;
     }
-
+    
     #panelInfo .esri-icon.esri-icon-map-pin {
       margin-right: 10px;
       font-size: 25px;
     }
-
+    
     #panelInfo .info-title {
       font-size: 20px;
     }
-
+    
     .form-box {
       display: flex;
       margin: 0px 15px;
       padding: 15px 0;
-      border: 1px solid rgba(255,255,255,.35);
-      background-color: rgba(130,130,130,.1);
+      border: 1px solid rgba(255, 255, 255, .35);
+      background-color: rgba(130, 130, 130, .1);
     }
-
+    
     .btn-color-close {
       margin-top: -17px;
       margin-right: -21px;
       font-size: 14px;
       color: #828282;
     }
+    
     .btn-color-close:hover,
     .btn-color-close:focus {
       color: #000;
     }
-
+    
     .control-padding-top {
       padding-top: 5px;
     }
-
+    
     .padding-right-none {
       padding-right: 0;
     }
-
+    
     .info-title {
       font-size: 25px;
       margin-bottom: 10px;
     }
-
     /* Color Widget */
-
+    
     .esri-color-picker .esri-swatch-preview.esri-container,
     .esri-color-picker .esri-header,
     .esri-color-picker .esri-footer,
@@ -88,39 +87,74 @@
     .esri-color-picker .esri-palette-options .esri-palette-toggle {
       display: none;
     }
+    
     .esri-color-picker.esri-container {
       border: 0;
       padding: 0;
       border-radius: 0;
       background-color: transparent;
     }
+    
     .esri-color-picker .esri-hex-input {
       border: 0;
       width: 100%;
     }
+    
     .esri-color-picker .esri-swatch-row {
       line-height: 1;
     }
+    
     .esri-color-picker .esri-swatch {
       width: 13px;
       height: 13px;
     }
+    
     .esri-color-picker .esri-hex-input .dijitInputInner {
       font-size: 12px;
       width: 100%;
       padding: 2px 4px;
     }
-
+    
+    #loadingOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1100;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #E5E5E5;
+      -webkit-box-shadow: inset 0px 0px 82px 19px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: inset 0px 0px 82px 19px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0px 0px 82px 19px rgba(0, 0, 0, 0.3);
+    }
+    
+    #loadingIndicator {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 1101;
+    }
+    
+    .loadingIndicator {
+      margin-left: -17px;
+      margin-top: -20px;
+    }
   </style>
 
 </head>
 
 <body class="calcite-nav-top">
 
+  <div id="loadingOverlay"></div>
+  <div id="loadingIndicator" class="loadingIndicator">
+    <img src="./static/images/loading-light.gif">
+  </div>
+
   <!-- Navbar -->
 
   <nav class="navbar navbar-fixed-top calcite-navbar calcite-bgcolor-dark calcite-text-light">
-     <!-- Menu -->
+    <!-- Menu -->
     <div class="dropdown calcite-dropdown calcite-bg-light calcite-text-dark" role="presentation">
       <!--a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"-->
       <a class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
@@ -139,19 +173,27 @@
         <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> 底图</a></li>
         <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
       </ul>
-    </div> 
+    </div>
     <!-- Title -->
     <div class="calcite-title calcite-overflow-hidden">
       <span class="calcite-title-main">Pollution Monitor System</span>
       <span class="calcite-title-divider hidden-xs"></span>
-      <span class="calcite-title-sub hidden-xs">Hangzhou</span> 
+      <span class="calcite-title-sub hidden-xs">Hangzhou</span>
     </div>
     <!-- Nav -->
-    <ul class="calcite-nav nav navbar-nav">                    
-      <li class="active"><a id="mapNav" class="hidden-xs hidden-sm" href="#2dTab" aria-controls="2Dtab" aria-expanded="true" role="tab" data-toggle="tab" data-tooltip="tip" title="2D View" data-placement="bottom">Map</a></li>                 
-      <li><div class="calcite-navbar-search calcite-search-expander"><div id="searchNavDiv"></div></div></li>
+    <ul class="calcite-nav nav navbar-nav">
+      <li class="active">
+        <a id="mapNav" class="hidden-xs hidden-sm" href="#2dTab" aria-controls="2Dtab" aria-expanded="true" role="tab" data-toggle="tab"
+          data-tooltip="tip" title="2D View" data-placement="bottom">Map</a>
+      </li>
+      <li>
+        <div class="calcite-navbar-search calcite-search-expander">
+          <div id="searchNavDiv"></div>
+        </div>
+      </li>
     </ul>
-  </nav><!--/.navbar -->
+  </nav>
+  <!--/.navbar -->
 
   <!-- Modal Window -->
 
@@ -167,7 +209,7 @@
                   <hr>
                   <div class="form-inline">
                     <div class="form-group">
-                      <button type="button" class="btn btn-success btn-lg"  data-dismiss="modal">Get started</a>
+                      <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Get started</a>
                     </div>
                   </div>
                   <br>
@@ -347,8 +389,8 @@
             <option value="satellite" data-vector="satellite">Satellite</option>
             <option value="hybrid" data-vector="hybrid">Hybrid</option>
             <option value="national-geographic" data-vector="national-geographic">National Geographic</option>
-            <option value="topo" data-vector="topo">Topographic</option>
-            <option value="gray" data-vector="gray-vector" selected>Gray</option>
+            <option value="topo" data-vector="topo" selected>Topographic</option>
+            <option value="gray" data-vector="gray-vector">Gray</option>
             <option value="dark-gray" data-vector="dark-gray-vector">Dark Gray</option>
             <option value="osm" data-vector="osm">Open Street Map</option>
             <option value="dark-gray" data-vector="streets-night-vector">Streets Night</option>
@@ -372,23 +414,15 @@
         //location: location.pathname.replace(/\/[^/]+$/, "") + "./../../lib/js/dojo"
       },
       {
-        name: "calcite-settings",
-        location: location.pathname.replace(/\/[^/]+$/, "") + "/static/js"
-      },
-      {
-        name: "squeak",
-        location: location.pathname.replace(/\/[^/]+$/, "") + "/static/js/squeak"
-      },
-      {
         name: 'd3',
         location: 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6',
         main: 'd3.min'
-      }, 
+      },
       {
         name: 'vega',
         location: 'https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.1',
         main: 'vega.min'
-      }, 
+      },
       {
         name: 'cedar',
         location: 'https://unpkg.com/arcgis-cedar@0.7.0/dist',
@@ -404,4 +438,3 @@
 
 </body>
 </html>
-
