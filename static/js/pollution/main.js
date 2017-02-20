@@ -541,6 +541,7 @@ require([
       domClass.replace(query(".calcite-div-toggle")[0], "calcite-div-toggle-bottom", "calcite-div-toggle-zero-bottom");
       domClass.replace(query(".calcite-div-toggle .up-arrow")[0], "down-arrow", "up-arrow");
       domClass.replace(query(".calcite-div-content-info-collapse")[0], "calcite-div-content-info", "calcite-div-content-info-collapse");
+      domStyle.set(query(".calcite-div-content-info")[0], 'display', '');
       domClass.add(query(".calcite-legend-box")[0], "calcite-legend-box-up");
     }
 
@@ -548,6 +549,7 @@ require([
       domClass.replace(query(".calcite-div-toggle")[0], "calcite-div-toggle-zero-bottom", "calcite-div-toggle-bottom");
       domClass.replace(query(".calcite-div-toggle .down-arrow")[0], "up-arrow", "down-arrow");
       domClass.replace(query(".calcite-div-content-info")[0], "calcite-div-content-info-collapse", "calcite-div-content-info");
+      domStyle.set(query(".calcite-div-content-info-collapse")[0], 'display', 'none');
       domClass.remove(query(".calcite-legend-box")[0], "calcite-legend-box-up");
     }
 
