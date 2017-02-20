@@ -26,9 +26,9 @@ This example references Bootstrap, Calcite Maps, ArcGIS and the appropriate JS f
 
 [Try it live!](https://xzdbd.com/squeak/pollution)
 
-![system-all.png](./doc/images/system-all.png "Pollution Monitor System")
+![system-all.png](./doc/images/system-all.png?raw=true "Pollution Monitor System")
 
-![system-all.png](./doc/images/details.png "Query details")
+![system-all.png](./doc/images/details.png?raw=true "Query details")
 
 ## Resources
 
