@@ -354,7 +354,7 @@ require([
       query.outFields = ["*"];
       query.where = "1=1";
 
-      queryTask.execute(query, { cacheBust: true }).then(function (result) {
+      queryTask.execute(query, { cacheBust: false }).then(function (result) {
         if (result.features.length > 0) {
           result.features.forEach(function (graphic) {
             quality = graphic.getAttribute("squeakdb.public.view_latest_pollution.quality");

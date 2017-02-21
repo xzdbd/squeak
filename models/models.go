@@ -164,6 +164,17 @@ func InsertNewPollutionData() (num int64, err error) {
 				beego.Error("Insert new pollution data into monitor_pollution failed. Error: ", err)
 			}
 			beego.Info("Insert new pollution data into monitor_pollution succeeded. Num:", num, "Time:", monitorPollutions[0].Time)
+
+			// clear rest cache
+			var resp ClearRestCacheResp
+			resp, err = ClearRestCache("dev", "PollutionStation", "MapServer")
+			if err != nil {
+				beego.Error("Clear REST cache failed. Error: ", err)
+			} else if resp.Status == "error" {
+				beego.Error("Clear REST cache failed. Error: ", resp.Messages, "Code:", resp.Code)
+			} else if resp.Status == "success" {
+				beego.Info("Clear REST cache for dev/PollutionStation/MapServer succeeded.")
+			}
 		} else {
 			beego.Info("No new pollution data")
 		}

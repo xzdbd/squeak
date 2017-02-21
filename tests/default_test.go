@@ -63,12 +63,12 @@ func TestQueryStationInfo(t *testing.T) {
 	}
 }*/
 
-func TestGetAQIDetailsByCity(t *testing.T) {
+/*func TestGetAQIDetailsByCity(t *testing.T) {
 	pollutions, _ := models.GetAQIDetailsByCity("hangzhou")
 	for i := 0; i < len(pollutions); i++ {
 		beego.Info(pollutions[i])
 	}
-}
+}*/
 
 /*func TestQueryPollutionInfo(t *testing.T) {
 	monitorPollutions, _ := models.QueryPollutionInfo(time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC), time.Date(2017, 2, 9, 17, 0, 0, 0, time.UTC))
@@ -83,3 +83,9 @@ func TestQueryPollutionInfoByStation(t *testing.T) {
 		beego.Info(monitorPollutions[i].Aqi, monitorPollutions[i].Time, monitorPollutions[i].MonitorStation, monitorPollutions[i].MonitorArea)
 	}
 }*/
+
+func TestClearRestCache(t *testing.T) {
+	clearRestCacheResp, err := models.ClearRestCache("dev", "PollutionStation", "MapServer")
+	beego.Info(clearRestCacheResp, err)
+
+}

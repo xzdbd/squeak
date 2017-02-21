@@ -15,10 +15,10 @@ import (
 
 const (
 	APIADDRESS = "http://www.pm25.in/api/querys/"
-	TOKEN      = "5j1znBVAsnSf5xQyNQyq"
 )
 
 var (
+	pm25token       = beego.AppConfig.String("pm25token")
 	MonitorAreas    map[int]string
 	MonitorStations map[int]string
 )
@@ -72,7 +72,7 @@ func GetAQIDetailsByCity(city string) ([]Pollution, error) {
 	var pollutionError PollutionError
 	url := APIADDRESS + "aqi_details.json"
 	req := httplib.Get(url)
-	req.Param("token", TOKEN)
+	req.Param("token", pm25token)
 	req.Param("city", city)
 	err := req.ToJSON(&pollutions)
 	if err != nil {
@@ -101,7 +101,7 @@ func GetStationInfoByCity(city string) (Stations, error) {
 	var pollutionError PollutionError
 	url := APIADDRESS + "station_names.json"
 	req := httplib.Get(url)
-	req.Param("token", TOKEN)
+	req.Param("token", pm25token)
 	req.Param("city", city)
 	err := req.ToJSON(&stations)
 	if err != nil {
