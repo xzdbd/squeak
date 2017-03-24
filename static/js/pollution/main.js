@@ -25,6 +25,9 @@ require([
   "esri/tasks/QueryTask",
   "esri/tasks/support/Query",
   "esri/layers/GraphicsLayer",
+  "esri/tasks/Geoprocessor",
+  "esri/tasks/support/FeatureSet",
+  "esri/layers/support/Field",
 
   "dojo/query",
   "dojo/dom-class",
@@ -55,7 +58,7 @@ require([
   // Dojo
   "dojo/domReady!"
 ], function (Map, Basemap, VectorTileLayer, MapView, SceneView, Search, Popup, Home, Legend, ColorPicker,
-  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, query, domClass, dom, on, domConstruct, date, locale, request, declare, domStyle, fx, Cedar, CalciteMapsSettings) {
+  watchUtils, FeatureLayer, MapImageLayer, PictureMarkerSymbol, QueryTask, Query, GraphicsLayer, Geoprocessor, FeatureSet, Field, query, domClass, dom, on, domConstruct, date, locale, request, declare, domStyle, fx, Cedar, CalciteMapsSettings) {
 
     app = {
       scale: 1155581,
@@ -412,6 +415,7 @@ require([
       setPopupPanelEvents();
       setPopupEvents();
       setResultContentEvents();
+      setAnalysisEvents();
     }
 
     //----------------------------------
@@ -586,6 +590,57 @@ require([
         //    src: app.legend.activeLayerInfos.items[0].legendElements[0].infos[0].src,
         //    style: "width:" + app.legend.activeLayerInfos.items[0].legendElements[0].infos[0].width + ";" + "height:" + app.legend.activeLayerInfos.items[0].legendElements[0].infos[0].height
         //}, legendNode);
+      });
+    }
+
+    //----------------------------------
+    // Analysis events
+    //----------------------------------
+    function setAnalysisEvents() {
+      query("#submitGP").on("click", function (e) {
+        var gp = new Geoprocessor("https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionOverlay/GPServer/Overlay");
+        var featureSet = new FeatureSet()
+
+        var layer = "https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionStation/MapServer/0";
+        var queryTask = new QueryTask({
+          url: layer
+        });
+        var query = new Query();
+        query.returnGeometry = true;
+        query.outFields = ["*"];
+        query.where = "1=1";
+
+        queryTask.execute(query, { cacheBust: false }).then(function (result) {
+          console.log(result);
+          result.fields.push(new Field(
+            {
+              alias: "no2",
+              name: "view_latest_pollution.no2",
+              type: "double"
+            })
+          );
+          result.features.forEach(function (graphic) {
+            graphic.setAttribute("view_latest_pollution.no2", graphic.getAttribute("squeakdb.public.view_latest_pollution.no2"))
+          });
+          featureSet = result;
+          console.log(featureSet);
+          var params = {
+            "hangzhouPollutionStation": featureSet
+          };
+          gp.submitJob(params).then(draw, errBack, progTest);
+
+          function draw(result) {
+            connsole.log(result)
+          }
+
+          function progTest(value) {
+            console.log(value.jobStatus);
+          }
+
+          function errBack(err) {
+            console.log("gp error: ", err);
+          }
+        });
       });
     }
 

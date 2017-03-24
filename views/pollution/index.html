@@ -31,20 +31,24 @@
       padding: 0;
       height: 100%;
     }
-    
+
+
     #panelLegend .panel-body {
       background-color: white;
     }
-    
+
+
     #panelInfo .esri-icon.esri-icon-map-pin {
       margin-right: 10px;
       font-size: 25px;
     }
-    
+
+
     #panelInfo .info-title {
       font-size: 20px;
     }
-    
+
+
     .form-box {
       display: flex;
       margin: 0px 15px;
@@ -52,69 +56,81 @@
       border: 1px solid rgba(255, 255, 255, .35);
       background-color: rgba(130, 130, 130, .1);
     }
-    
+
+
     .btn-color-close {
       margin-top: -17px;
       margin-right: -21px;
       font-size: 14px;
       color: #828282;
     }
-    
+
+
     .btn-color-close:hover,
     .btn-color-close:focus {
       color: #000;
     }
-    
+
+
     .control-padding-top {
       padding-top: 5px;
     }
-    
+
+
     .padding-right-none {
       padding-right: 0;
     }
-    
+
+
     .info-title {
       font-size: 25px;
       margin-bottom: 10px;
     }
     /* Color Widget */
-    
+
+
     .esri-color-picker .esri-swatch-preview.esri-container,
     .esri-color-picker .esri-header,
     .esri-color-picker .esri-footer,
-    .esri-color-picker .esri-palette-options .esri-palette-toggle > input,
+    .esri-color-picker .esri-palette-options .esri-palette-toggle>input,
     .dijitReset .dijitToggleButtonIconChar,
     .esri-color-picker .esri-palette-options .esri-palette-toggle {
       display: none;
     }
-    
+
+
     .esri-color-picker.esri-container {
       border: 0;
       padding: 0;
       border-radius: 0;
       background-color: transparent;
     }
-    
+
+
     .esri-color-picker .esri-hex-input {
       border: 0;
       width: 100%;
     }
-    
+
+
     .esri-color-picker .esri-swatch-row {
       line-height: 1;
     }
-    
+
+
     .esri-color-picker .esri-swatch {
       width: 13px;
       height: 13px;
     }
-    
+
+
     .esri-color-picker .esri-hex-input .dijitInputInner {
       font-size: 12px;
       width: 100%;
       padding: 2px 4px;
     }
-    
+
+
     #loadingOverlay {
       position: absolute;
       top: 0;
@@ -128,14 +144,16 @@
       -moz-box-shadow: inset 0px 0px 82px 19px rgba(0, 0, 0, 0.3);
       box-shadow: inset 0px 0px 82px 19px rgba(0, 0, 0, 0.3);
     }
-    
+
+
     #loadingIndicator {
       position: fixed;
       top: 50%;
       left: 50%;
       z-index: 1101;
     }
-    
+
+
     .loadingIndicator {
       margin-left: -17px;
       margin-top: -20px;
@@ -171,6 +189,7 @@
         <li><a class="hidden-md hidden-lg" href="#2dTab" aria-controls="2Dtab" role="tab" data-toggle="tab"> Map</a></li>
         <li><a class="visible-xs" role="button" data-target="#panelSearch" aria-haspopup="true"><span class="glyphicon glyphicon-search"></span> Search</a></li>
         <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> 底图</a></li>
+        <li><a role="button" data-target="#panelAnalysis" aria-haspopup="true"><span class="glyphicon glyphicon-th-large"></span> 分析</a></li>
         <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>
       </ul>
     </div>
@@ -373,6 +392,22 @@
       </div>
     </div>
 
+    <!-- Panel - Analysis GP -->
+
+     <div id="panelAnalysis" class="panel collapse">
+      <div id="headingAnalysis" class="panel-heading" role="tab">
+        <div class="panel-title">
+          <a class="panel-toggle" role="button" data-toggle="collapse" href="#collapseAnalysis" aria-expanded="false" aria-controls="collapseAnalysis"><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span><span class="panel-label">Analysis</span></a> 
+          <a class="panel-close" role="button" data-toggle="collapse" data-target="#panelAnalysis"><span class="esri-icon esri-icon-close" aria-hidden="true"></span></a>  
+        </div>
+      </div>
+      <div id="collapseAnalysis" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingAnalysis">
+        <div class="panel-body">
+          <button type="button" class="btn btn-success btn-lg" id="submitGP" data-dismiss="modal">Submit</button>
+        </div>
+      </div>
+    </div>  
+
     <!-- Panel - Basemaps -->
 
      <div id="panelBasemaps" class="panel collapse">
@@ -398,7 +433,7 @@
           </select>
         </div>
       </div>
-    </div>  
+    </div>
 
   </div> <!-- /.calcite-panels group-->
 
