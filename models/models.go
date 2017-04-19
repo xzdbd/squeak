@@ -48,6 +48,30 @@ type MonitorPollution struct {
 	MonitorStation   *MonitorStation `orm:"rel(fk)"`
 }
 
+type ViewLatestPollution struct {
+	Id               int
+	Aqi              int32     `json:"aqi"`
+	PrimaryPollutant string    `json:"primary_pollutant"`
+	So2              float32   `json:"so2"`
+	So224h           float32   `json:"so2_24h"`
+	No2              float32   `json:"no2"`
+	No224h           float32   `json:"no2_24h"`
+	Pm10             float32   `json:"pm10"`
+	Pm1024h          float32   `json:"pm10_24h"`
+	Co               float32   `json:"co2"`
+	Co24h            float32   `json:"co2_24h"`
+	O3               float32   `json:"o3"`
+	O324h            float32   `json:"o3_24h"`
+	O38h             float32   `json:"o3_8h"`
+	O38h24h          float32   `json:"o3_8h_24h"`
+	Pm25             float32   `json:"pm2_5"`
+	Pm2524h          float32   `json:"pm2_5_24h"`
+	Quality          string    `json:"quality"`
+	Time             time.Time `json:"time_point"`
+	MonitorAreaId    int
+	MonitorStationId int
+}
+
 func init() {
 	//orm.Debug = true
 	initDBConnection()
@@ -58,9 +82,10 @@ func init() {
 
 func initDBConnection() {
 	orm.RegisterDataBase("default", "postgres", beego.AppConfig.String("dbconnection"))
+	orm.RegisterDataBase("spatial", "postgres", beego.AppConfig.String("spatialdbconnection"))
 	orm.SetMaxIdleConns("default", 30)
 	orm.DefaultTimeLoc = time.UTC
-	orm.RegisterModel(new(MonitorArea), new(MonitorStation), new(MonitorPollution))
+	orm.RegisterModel(new(MonitorArea), new(MonitorStation), new(MonitorPollution), new(ViewLatestPollution))
 }
 
 func syncdb() {
@@ -74,6 +99,7 @@ func syncdb() {
 func syncArea() {
 	//InitTableArea()
 	o := orm.NewOrm()
+	o.Using("default")
 	monitorArea := new(MonitorArea)
 	monitorArea.Id = 1
 	monitorArea.Name = "杭州"
@@ -91,6 +117,7 @@ func syncArea() {
 
 func syncStation() {
 	o := orm.NewOrm()
+	o.Using("default")
 	count, err := o.QueryTable("monitor_station").Count()
 	if err != nil || count <= 0 {
 		var stations []MonitorStation
@@ -116,11 +143,12 @@ func syncStation() {
 }
 
 // get latest pollutioon data and insert it into pollution table
-// TO-DO when insert succeeded, clear arcgis server cache
+// when insert succeeded, clear arcgis server cache
 // http://resources.arcgis.com/en/help/rest/apiref/clearcache.html
 func InsertNewPollutionData() (num int64, err error) {
 	var monitorPollutions []MonitorPollution
 	o := orm.NewOrm()
+	o.Using("default")
 	if pollutions, err := GetAQIDetailsByCity("hangzhou"); err == nil {
 		for i := 0; i < len(pollutions); i++ {
 			//TODO use cache
@@ -185,6 +213,7 @@ func InsertNewPollutionData() (num int64, err error) {
 // get all areas information
 func QueryAreaInfo() (monitorAreas []*MonitorArea, err error) {
 	o := orm.NewOrm()
+	o.Using("default")
 	_, err = o.QueryTable(new(MonitorArea)).All(&monitorAreas)
 	if err != nil {
 		beego.Error("Query Area Info error:", err)
@@ -195,6 +224,7 @@ func QueryAreaInfo() (monitorAreas []*MonitorArea, err error) {
 // get all stations information
 func QueryStationInfo() (monitorStations []*MonitorStation, err error) {
 	o := orm.NewOrm()
+	o.Using("default")
 	_, err = o.QueryTable(new(MonitorStation)).All(&monitorStations)
 	if err != nil {
 		beego.Error("Query Area Info error:", err)
@@ -206,6 +236,7 @@ func QueryStationInfo() (monitorStations []*MonitorStation, err error) {
 func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollutions []*MonitorPollution, err error) {
 	var defaultRowsLimit = 1000
 	o := orm.NewOrm()
+	o.Using("default")
 	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollutions)
 	if err != nil {
 		beego.Error("Query Pollution Info error:", err)
@@ -217,6 +248,7 @@ func QueryPollutionInfo(from time.Time, to time.Time) (monitorPollutions []*Moni
 func QueryPollutionInfoByStation(stationId int, from time.Time, to time.Time) (monitorPollutions []*MonitorPollution, err error) {
 	var defaultRowsLimit = 1000
 	o := orm.NewOrm()
+	o.Using("default")
 	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", from).Filter("Time__lte", to).RelatedSel().All(&monitorPollutions)
 	if err != nil {
 		beego.Error("Query Pollution Info error:", err)
@@ -227,11 +259,41 @@ func QueryPollutionInfoByStation(stationId int, from time.Time, to time.Time) (m
 func QueryPollutionInfoLast24HourByStation(stationId int) (monitorPollutions []*MonitorPollution, err error) {
 	var defaultRowsLimit = 1000
 	o := orm.NewOrm()
+	o.Using("default")
 	_, err = o.QueryTable(new(MonitorPollution)).Limit(defaultRowsLimit).Filter("MonitorStation__id", stationId).Filter("Time__gte", "(SELECT MAX(time) - interval '1 DAY' FROM monitor_pollution)").Filter("Time__lte", "(SELECT MAX(time) FROM monitor_pollution)").RelatedSel().All(&monitorPollutions)
 	if err != nil {
 		beego.Error("Query Pollution Info error:", err)
 	}
 	return
+}
+
+func QueryViewLatestPollution() (viewLatestPollution []*ViewLatestPollution, err error) {
+	o := orm.NewOrm()
+	o.Using("default")
+	_, err = o.QueryTable(new(ViewLatestPollution)).All(&viewLatestPollution)
+	if err != nil {
+		beego.Error("Query ViewLastesPollution Info error:", err)
+	}
+	beego.Trace(viewLatestPollution)
+	return
+}
+
+func UpdateHangzhouPollutionStation() error {
+	viewLatestPollution, err := QueryViewLatestPollution()
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	o.Using("spatial")
+
+	for i := 0; i < len(viewLatestPollution); i++ {
+		_, ormerr := o.Raw("UPDATE dataloader.hangzhoupollutionstation SET aqi=?, quality=?, primarypollutant=?, so2=?, so224h=?, no2=?, no224h=?, pm10=?, pm1024h=?, co=?, co24h=?, o3=?, o324h=?, o38h24h=?, pm25=?, pm2524h=?, time=? WHERE id=?", viewLatestPollution[i].Aqi, viewLatestPollution[i].Quality, viewLatestPollution[i].PrimaryPollutant, viewLatestPollution[i].So2, viewLatestPollution[i].So224h, viewLatestPollution[i].No2, viewLatestPollution[i].No224h, viewLatestPollution[i].Pm10, viewLatestPollution[i].Pm1024h, viewLatestPollution[i].Co, viewLatestPollution[i].Co24h, viewLatestPollution[i].O3, viewLatestPollution[i].O324h, viewLatestPollution[i].O38h24h, viewLatestPollution[i].Pm25, viewLatestPollution[i].Pm2524h, viewLatestPollution[i].Time, viewLatestPollution[i].MonitorStationId).Exec()
+		if ormerr != nil {
+			beego.Error("Error when updating hangzhoupollutionstation attributes", ormerr)
+		}
+	}
+
+	return nil
 }
 
 /*func QueryPollutionInfoLast24HourByStation(stationId int) (monitorPollutions []*MonitorPollution, err error) {

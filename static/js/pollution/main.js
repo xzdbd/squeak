@@ -171,17 +171,17 @@ require([
 
       app.mapView.then(function () {
         var mapImageLayer = new MapImageLayer({
-          url: "https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionStation/MapServer"
+          url: "https://gis.xzdbd.com/arcgis/rest/services/prod/PollutionStation/MapServer"
         });
         app.mapView.map.add(mapImageLayer);
 
         /*var template = {
-          title: "<font color='#008000'>监测站：{hangzhouPollutionStation.name}",
+          title: "<font color='#008000'>监测站：{name}",
 
           content: [{
             type: "fields",
             fieldInfos: [{
-              fieldName: "squeakdb.public.view_latest_pollution.aqi",
+              fieldName: "aqi",
               visible: true,
               label: "AQI",
               format: {
@@ -189,19 +189,19 @@ require([
                 digitSeparator: true
               },
             }, {
-              fieldName: "squeakdb.public.view_latest_pollution.quality",
+              fieldName: "quality",
               visible: true,
               label: "当前空气质量",
             }, {
-              fieldName: "squeakdb.public.view_latest_pollution.primary_pollutant",
+              fieldName: "primary_pollutant",
               visible: true,
               label: "首要污染物",
             },
             ]
           }, {
             type: "text",
-            //text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateString(hideTime: false, local: false, systemLocale: false)}",
-            text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
+            //text: "数据更新时间：{time:DateString(hideTime: false, local: false, systemLocale: false)}",
+            text: "数据更新时间：{time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
           }]
         };
 
@@ -246,21 +246,21 @@ require([
     }
 
     function updateDetailInfo(response) {
-      dom.byId("detail-station-name").innerHTML = "监测站名称: " + isNullValue(response.results[0].graphic.getAttribute("hangzhouPollutionStation.name"));
-      dom.byId("detail-station-area").innerHTML = "所在城市: " + isNullValue(response.results[0].graphic.getAttribute(["hangzhouPollutionStation.area"]));
-      dom.byId("detail-station-time").innerHTML = "数据更新时间： " + isNullValue(formatDate(getLocalTime(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.time"]))));
+      dom.byId("detail-station-name").innerHTML = "监测站名称: " + isNullValue(response.results[0].graphic.getAttribute("name"));
+      dom.byId("detail-station-area").innerHTML = "所在城市: " + isNullValue(response.results[0].graphic.getAttribute(["city"]));
+      dom.byId("detail-station-time").innerHTML = "数据更新时间： " + isNullValue(formatDate(getLocalTime(response.results[0].graphic.getAttribute(["time"]))));
 
-      dom.byId("detail-detail-quality").innerHTML = "空气质量: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.quality"]));
-      dom.byId("detail-detail-aqi").innerHTML = "AQI: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.aqi"]));
-      dom.byId("detail-detail-primary-pollutant").innerHTML = "首要污染物: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.primary_pollutant"]));
-      dom.byId("detail-detail-pm25").innerHTML = "PM2.5: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.pm25"]));
-      dom.byId("detail-detail-pm10").innerHTML = "PM10: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.pm10"]));
-      dom.byId("detail-detail-co").innerHTML = "CO: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.co"]));
-      dom.byId("detail-detail-no2").innerHTML = "NO2: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.no2"]));
-      dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.o3"]));
-      dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(response.results[0].graphic.getAttribute(["squeakdb.public.view_latest_pollution.so2"]));
+      dom.byId("detail-detail-quality").innerHTML = "空气质量: " + isNullValue(response.results[0].graphic.getAttribute(["quality"]));
+      dom.byId("detail-detail-aqi").innerHTML = "AQI: " + isNullValue(response.results[0].graphic.getAttribute(["aqi"]));
+      dom.byId("detail-detail-primary-pollutant").innerHTML = "首要污染物: " + isNullValue(response.results[0].graphic.getAttribute(["primary_pollutant"]));
+      dom.byId("detail-detail-pm25").innerHTML = "PM2.5: " + isNullValue(response.results[0].graphic.getAttribute(["pm25"]));
+      dom.byId("detail-detail-pm10").innerHTML = "PM10: " + isNullValue(response.results[0].graphic.getAttribute(["pm10"]));
+      dom.byId("detail-detail-co").innerHTML = "CO: " + isNullValue(response.results[0].graphic.getAttribute(["co"]));
+      dom.byId("detail-detail-no2").innerHTML = "NO2: " + isNullValue(response.results[0].graphic.getAttribute(["no2"]));
+      dom.byId("detail-detail-o3").innerHTML = "O3: " + isNullValue(response.results[0].graphic.getAttribute(["o3"]));
+      dom.byId("detail-detail-so2").innerHTML = "SO2: " + isNullValue(response.results[0].graphic.getAttribute(["so2"]));
 
-      updateChartInfo(response.results[0].graphic.getAttribute(["hangzhouPollutionStation.id"]));
+      updateChartInfo(response.results[0].graphic.getAttribute(["id"]));
 
       function getLocalTime(timestamp) {
         return new Date(parseInt(timestamp));
@@ -284,7 +284,7 @@ require([
 
     function initializeStationLayer() {
       var graphicsLayer = new GraphicsLayer();
-      var layer = "https://gis.xzdbd.com/arcgis/rest/services/dev/PollutionStation/MapServer/0";
+      var layer = "https://gis.xzdbd.com/arcgis/rest/services/prod/PollutionStation/MapServer/0";
       var goodSymbol = new PictureMarkerSymbol({
         url: location.pathname.replace(/\/[^/]+$/, "") + "/static/images/good.png",
         width: "56px",
@@ -316,12 +316,12 @@ require([
         height: "70px",
       });
       var template = {
-        title: "<font color='#008000'>监测站：{hangzhouPollutionStation.name}",
+        title: "<font color='#008000'>监测站：{name}",
 
         content: [{
           type: "fields",
           fieldInfos: [{
-            fieldName: "squeakdb.public.view_latest_pollution.aqi",
+            fieldName: "aqi",
             visible: true,
             label: "AQI",
             format: {
@@ -329,18 +329,18 @@ require([
               digitSeparator: true
             },
           }, {
-            fieldName: "squeakdb.public.view_latest_pollution.quality",
+            fieldName: "quality",
             visible: true,
             label: "当前空气质量",
           }, {
-            fieldName: "squeakdb.public.view_latest_pollution.primary_pollutant",
+            fieldName: "primary_pollutant",
             visible: true,
             label: "主要污染物",
           },
           ]
         }, {
           type: "text",
-          text: "数据更新时间：{squeakdb.public.view_latest_pollution.time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
+          text: "数据更新时间：{time:DateFormat(datePattern: 'yyyy-MM-d', timePattern: 'HH:mm')}",
         }],
 
         actions: [{
@@ -360,7 +360,7 @@ require([
       queryTask.execute(query, { cacheBust: false }).then(function (result) {
         if (result.features.length > 0) {
           result.features.forEach(function (graphic) {
-            quality = graphic.getAttribute("squeakdb.public.view_latest_pollution.quality");
+            quality = graphic.getAttribute("quality");
             switch (quality) {
               case "优":
                 graphic.symbol = goodSymbol;
@@ -620,7 +620,7 @@ require([
             })
           );
           result.features.forEach(function (graphic) {
-            graphic.setAttribute("view_latest_pollution.no2", graphic.getAttribute("squeakdb.public.view_latest_pollution.no2"))
+            graphic.setAttribute("view_latest_pollution.no2", graphic.getAttribute("no2"))
           });
           featureSet = result;
           console.log(featureSet);
