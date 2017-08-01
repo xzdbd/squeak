@@ -193,8 +193,8 @@ func InsertNewPollutionData() (num int64, err error) {
 			}
 			beego.Info("Insert new pollution data into monitor_pollution succeeded. Num:", num, "Time:", monitorPollutions[0].Time)
 
-			// clear rest cache
-			var resp ClearRestCacheResp
+			// clear rest cache (removed)
+			/*var resp ClearRestCacheResp
 			resp, err = ClearRestCache("dev", "PollutionStation", "MapServer")
 			if err != nil {
 				beego.Error("Clear REST cache failed. Error: ", err)
@@ -202,7 +202,7 @@ func InsertNewPollutionData() (num int64, err error) {
 				beego.Error("Clear REST cache failed. Error: ", resp.Messages, "Code:", resp.Code)
 			} else if resp.Status == "success" {
 				beego.Info("Clear REST cache for dev/PollutionStation/MapServer succeeded.")
-			}
+			}*/
 		} else {
 			beego.Info("No new pollution data")
 		}
@@ -274,7 +274,6 @@ func QueryViewLatestPollution() (viewLatestPollution []*ViewLatestPollution, err
 	if err != nil {
 		beego.Error("Query ViewLastesPollution Info error:", err)
 	}
-	beego.Trace(viewLatestPollution)
 	return
 }
 
@@ -283,14 +282,17 @@ func UpdateHangzhouPollutionStation() error {
 	if err != nil {
 		return err
 	}
-	o := orm.NewOrm()
-	o.Using("spatial")
+	if len(viewLatestPollution) > 0 {
+		o := orm.NewOrm()
+		o.Using("spatial")
 
-	for i := 0; i < len(viewLatestPollution); i++ {
-		_, ormerr := o.Raw("UPDATE dataloader.hangzhoupollutionstation SET aqi=?, quality=?, primarypollutant=?, so2=?, so224h=?, no2=?, no224h=?, pm10=?, pm1024h=?, co=?, co24h=?, o3=?, o324h=?, o38h24h=?, pm25=?, pm2524h=?, time=? WHERE id=?", viewLatestPollution[i].Aqi, viewLatestPollution[i].Quality, viewLatestPollution[i].PrimaryPollutant, viewLatestPollution[i].So2, viewLatestPollution[i].So224h, viewLatestPollution[i].No2, viewLatestPollution[i].No224h, viewLatestPollution[i].Pm10, viewLatestPollution[i].Pm1024h, viewLatestPollution[i].Co, viewLatestPollution[i].Co24h, viewLatestPollution[i].O3, viewLatestPollution[i].O324h, viewLatestPollution[i].O38h24h, viewLatestPollution[i].Pm25, viewLatestPollution[i].Pm2524h, viewLatestPollution[i].Time, viewLatestPollution[i].MonitorStationId).Exec()
-		if ormerr != nil {
-			beego.Error("Error when updating hangzhoupollutionstation attributes", ormerr)
+		for i := 0; i < len(viewLatestPollution); i++ {
+			_, ormerr := o.Raw("UPDATE dataloader.hangzhoupollutionstation SET aqi=?, quality=?, primarypollutant=?, so2=?, so224h=?, no2=?, no224h=?, pm10=?, pm1024h=?, co=?, co24h=?, o3=?, o324h=?, o38h24h=?, pm25=?, pm2524h=?, time=? WHERE id=?", viewLatestPollution[i].Aqi, viewLatestPollution[i].Quality, viewLatestPollution[i].PrimaryPollutant, viewLatestPollution[i].So2, viewLatestPollution[i].So224h, viewLatestPollution[i].No2, viewLatestPollution[i].No224h, viewLatestPollution[i].Pm10, viewLatestPollution[i].Pm1024h, viewLatestPollution[i].Co, viewLatestPollution[i].Co24h, viewLatestPollution[i].O3, viewLatestPollution[i].O324h, viewLatestPollution[i].O38h24h, viewLatestPollution[i].Pm25, viewLatestPollution[i].Pm2524h, viewLatestPollution[i].Time, viewLatestPollution[i].MonitorStationId).Exec()
+			if ormerr != nil {
+				beego.Error("Error when updating hangzhoupollutionstation attributes", ormerr)
+			}
 		}
+		beego.Info("Update dataloader.hangzhoupollutionstation succeeded")
 	}
 
 	return nil

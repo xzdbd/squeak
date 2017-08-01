@@ -15,7 +15,10 @@ func init() {
 }
 
 func newPollutionDataTask() error {
-	_, err := models.InsertNewPollutionData()
-	err = models.UpdateHangzhouPollutionStation()
-	return err
+	insertCount, err := models.InsertNewPollutionData()
+	if insertCount > 0 {
+		err = models.UpdateHangzhouPollutionStation()
+		return err
+	}
+	return nil
 }
