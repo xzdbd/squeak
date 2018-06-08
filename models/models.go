@@ -143,7 +143,7 @@ func syncStation() {
 }
 
 // get latest pollutioon data and insert it into pollution table
-// when insert succeeded, clear arcgis server cache
+// when insert succeeded, clear arcgis server cache (removed)
 // http://resources.arcgis.com/en/help/rest/apiref/clearcache.html
 func InsertNewPollutionData() (num int64, err error) {
 	var monitorPollutions []MonitorPollution
