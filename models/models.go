@@ -287,12 +287,12 @@ func UpdateHangzhouPollutionStation() error {
 		o.Using("spatial")
 
 		for i := 0; i < len(viewLatestPollution); i++ {
-			_, ormerr := o.Raw("UPDATE dataloader.hangzhoupollutionstation SET aqi=?, quality=?, primarypollutant=?, so2=?, so224h=?, no2=?, no224h=?, pm10=?, pm1024h=?, co=?, co24h=?, o3=?, o324h=?, o38h24h=?, pm25=?, pm2524h=?, time=? WHERE id=?", viewLatestPollution[i].Aqi, viewLatestPollution[i].Quality, viewLatestPollution[i].PrimaryPollutant, viewLatestPollution[i].So2, viewLatestPollution[i].So224h, viewLatestPollution[i].No2, viewLatestPollution[i].No224h, viewLatestPollution[i].Pm10, viewLatestPollution[i].Pm1024h, viewLatestPollution[i].Co, viewLatestPollution[i].Co24h, viewLatestPollution[i].O3, viewLatestPollution[i].O324h, viewLatestPollution[i].O38h24h, viewLatestPollution[i].Pm25, viewLatestPollution[i].Pm2524h, viewLatestPollution[i].Time, viewLatestPollution[i].MonitorStationId).Exec()
+			_, ormerr := o.Raw("UPDATE sde.hangzhoupollutionstation SET aqi=?, quality=?, primarypollutant=?, so2=?, so224h=?, no2=?, no224h=?, pm10=?, pm1024h=?, co=?, co24h=?, o3=?, o324h=?, o38h24h=?, pm25=?, pm2524h=?, time=? WHERE id=?", viewLatestPollution[i].Aqi, viewLatestPollution[i].Quality, viewLatestPollution[i].PrimaryPollutant, viewLatestPollution[i].So2, viewLatestPollution[i].So224h, viewLatestPollution[i].No2, viewLatestPollution[i].No224h, viewLatestPollution[i].Pm10, viewLatestPollution[i].Pm1024h, viewLatestPollution[i].Co, viewLatestPollution[i].Co24h, viewLatestPollution[i].O3, viewLatestPollution[i].O324h, viewLatestPollution[i].O38h24h, viewLatestPollution[i].Pm25, viewLatestPollution[i].Pm2524h, viewLatestPollution[i].Time, viewLatestPollution[i].MonitorStationId).Exec()
 			if ormerr != nil {
 				beego.Error("Error when updating hangzhoupollutionstation attributes", ormerr)
 			}
 		}
-		beego.Info("Update dataloader.hangzhoupollutionstation succeeded")
+		beego.Info("Update sde.hangzhoupollutionstation succeeded")
 	}
 
 	return nil
