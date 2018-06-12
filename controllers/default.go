@@ -22,7 +22,7 @@ type PollutionChartController struct {
 }
 
 func (c *MainController) Get() {
-	c.TplName = "index.html"
+	c.TplName = "landing/index.html"
 }
 
 func (c *PollutionController) Get() {
